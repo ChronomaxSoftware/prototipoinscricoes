@@ -1968,10 +1968,10 @@
             <div class="section-title"><i class="fas fa-user-plus"></i> Quantos atletas?</div>
             <div class="group-counter">
                 <button class="counter-btn" onclick="changeGroupSize(-1)" id="btnMinus"><i class="fas fa-minus"></i></button>
-                <div class="counter-value" id="groupSize">2</div>
+                <div class="counter-value" id="groupSize">10</div>
                 <button class="counter-btn" onclick="changeGroupSize(1)" id="btnPlus"><i class="fas fa-plus"></i></button>
             </div>
-            <div class="counter-label">Mínimo 2 — Máximo 50 atletas</div>
+            <div class="counter-label">Mínimo 10 atletas — Sem limite</div>
         </div>
 
         <div style="margin-top: 32px; text-align: center;">
@@ -2855,7 +2855,7 @@
 // ===== STATE =====
 let state = {
     type: null, // 'individual' or 'group'
-    groupSize: 2,
+    groupSize: 10,
     modality: null,
     kit: null,
     size: null,
@@ -2901,10 +2901,9 @@ function selectType(type) {
 }
 
 function changeGroupSize(delta) {
-    state.groupSize = Math.max(2, Math.min(50, state.groupSize + delta));
+    state.groupSize = Math.max(10, state.groupSize + delta);
     document.getElementById('groupSize').textContent = state.groupSize;
-    document.getElementById('btnMinus').disabled = state.groupSize <= 2;
-    document.getElementById('btnPlus').disabled = state.groupSize >= 50;
+    document.getElementById('btnMinus').disabled = state.groupSize <= 10;
 }
 
 // ===== MODALITY =====
@@ -3414,7 +3413,7 @@ function handleHash() {
     if (hash === '#grupo' || hash.startsWith('#grupo/')) {
         // Organizer: manage all athletes
         state.type = 'group';
-        state.groupSize = state.groupSize >= 2 ? state.groupSize : 4;
+        state.groupSize = state.groupSize >= 10 ? state.groupSize : 10;
         state.kit = state.kit || 'premium';
         state.modality = state.modality || 'corrida';
         buildGroupFillScreen();

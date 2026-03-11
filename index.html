@@ -229,7 +229,147 @@
         /* Event info section */
         .event-info-section {
             padding: 0 24px 40px;
-            max-width: 900px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .event-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 800px) {
+            .event-two-col { grid-template-columns: 1fr; }
+        }
+
+        .event-description {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+        }
+
+        .event-description h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-description h3 i { color: var(--primary); }
+
+        .event-description p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .modality-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .modality-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--secondary);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            transition: border-color 0.2s;
+        }
+
+        .modality-item:hover { border-color: var(--primary); }
+
+        .modality-item-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-sm);
+            background: rgba(0,230,118,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .modality-item h4 {
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        .modality-item p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .map-section {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            padding: 20px 24px 0;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .map-section h3 i { color: var(--primary); }
+
+        .map-section .map-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 0 24px 16px;
+        }
+
+        .map-section iframe {
+            width: 100%;
+            flex: 1;
+            min-height: 350px;
+            border: none;
+            border-top: 1px solid var(--surface-border);
+        }
+
+        .map-legend {
+            display: flex;
+            gap: 16px;
+            padding: 14px 24px;
+            border-top: 1px solid var(--surface-border);
+            flex-wrap: wrap;
+        }
+
+        .map-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .map-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
         .info-cards {
@@ -1611,6 +1751,9 @@
             <span class="dot"></span>
             Inscrições abertas
         </div>
+        <button class="btn-primary" onclick="goToScreen('type')" style="padding:10px 24px;font-size:0.8rem;border-radius:20px;box-shadow:none;">
+            Inscreva-se <i class="fas fa-arrow-right"></i>
+        </button>
     </div>
 </header>
 
@@ -1652,6 +1795,12 @@
                     24.000 vagas
                 </div>
             </div>
+            <div style="margin-top:28px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+                <button class="btn-primary" onclick="goToScreen('type')" style="padding:16px 40px;">
+                    <i class="fas fa-ticket-alt"></i> Garantir minha vaga
+                </button>
+                <span style="font-size:0.82rem;color:var(--text-muted);">A partir de <strong style="color:var(--primary);">R$ 149,00</strong></span>
+            </div>
         </div>
     </div>
 
@@ -1686,6 +1835,76 @@
             </div>
             <div class="spots-progress">
                 <div class="spots-progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Two columns: Description + Map -->
+        <div class="event-two-col">
+            <!-- Left: Description & Modalities -->
+            <div class="event-description">
+                <h3><i class="fas fa-info-circle"></i> Sobre o Evento</h3>
+                <p>
+                    A <strong>40ª edição</strong> da prova pedestre 10 KM TRIBUNA será realizada na cidade de <strong>Santos</strong> no dia <strong>17 de maio de 2026</strong>, com qualquer condição climática.
+                </p>
+                <p>
+                    A participação está aberta a pessoas de todos os gêneros devidamente inscritas. A idade mínima é de 18 anos completos na data da prova. Capacidade máxima de <strong>24.000 participantes</strong>.
+                </p>
+
+                <div style="font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:12px;margin-top:20px;">Modalidades disponíveis:</div>
+                <div class="modality-list">
+                    <div class="modality-item">
+                        <div class="modality-item-icon"><i class="fas fa-bolt"></i></div>
+                        <div>
+                            <h4>10km Corrida</h4>
+                            <p>Corrida individual com medida oficial de 10.000 metros. Categorias competitivas Elite A, Elite B e Amador por faixa etária.</p>
+                        </div>
+                    </div>
+                    <div class="modality-item">
+                        <div class="modality-item-icon"><i class="fas fa-walking"></i></div>
+                        <div>
+                            <h4>10km Caminhada</h4>
+                            <p>Caminhada individual participativa com medida oficial de 10.000 metros. Aberta a todos os públicos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;padding:14px;background:var(--secondary);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text-secondary);line-height:1.6;">
+                    <i class="fas fa-map-pin" style="color:var(--primary);margin-right:6px;"></i>
+                    <strong style="color:var(--text);">Largada:</strong> Rua João Pessoa, nº 129 — Santos<br>
+                    <i class="fas fa-flag-checkered" style="color:var(--accent);margin-right:6px;"></i>
+                    <strong style="color:var(--text);">Chegada:</strong> Av. Presidente Wilson / Av. Ana Costa<br>
+                    <i class="fas fa-tint" style="color:#00B0FF;margin-right:6px;"></i>
+                    <strong style="color:var(--text);">Dispersão:</strong> Canal 2 (Av. Bernardino de Campos) — hidratação e medalhas
+                </div>
+            </div>
+
+            <!-- Right: Route Map -->
+            <div class="map-section">
+                <h3><i class="fas fa-map-marked-alt"></i> Percurso Oficial</h3>
+                <p class="map-subtitle">Mapa interativo com o trajeto completo da prova</p>
+                <iframe
+                    src="https://www.google.com/maps/d/embed?mid=14FxTSYGx2zTAm1EpDEVuz1gjMk1tIgg&ehbc=2E312F&ll=-23.9419,-46.3398&z=14"
+                    allowfullscreen
+                    loading="lazy">
+                </iframe>
+                <div class="map-legend">
+                    <div class="map-legend-item">
+                        <div class="map-legend-dot" style="background:#00E676;"></div>
+                        Largada
+                    </div>
+                    <div class="map-legend-item">
+                        <div class="map-legend-dot" style="background:#FF6D00;"></div>
+                        Chegada
+                    </div>
+                    <div class="map-legend-item">
+                        <div class="map-legend-dot" style="background:#00B0FF;"></div>
+                        Hidratação
+                    </div>
+                    <div class="map-legend-item">
+                        <div class="map-legend-dot" style="background:#FF5252;"></div>
+                        Apoio médico
+                    </div>
+                </div>
             </div>
         </div>
 

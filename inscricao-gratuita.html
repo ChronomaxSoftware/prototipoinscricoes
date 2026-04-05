@@ -846,6 +846,10 @@
                 <span class="label" id="cartDonationLabel">🥛 1x Lata de Leite (doação)</span>
                 <span id="cartDonationPrice">R$ 15,00</span>
             </div>
+            <div class="cart-line" id="cartFeeLine" style="display:none;">
+                <span class="label">Taxa de serviço (8%)</span>
+                <span id="cartFee">R$ 1,20</span>
+            </div>
             <div class="cart-line total">
                 <span class="label">Total</span>
                 <span class="value" id="cartTotal">R$ 0,00</span>
@@ -899,9 +903,13 @@
                 <span class="label" id="payDonationLabel">🥛 1x Lata de Leite (doação)</span>
                 <span id="payDonationPrice">R$ 15,00</span>
             </div>
+            <div class="cart-line">
+                <span class="label">Taxa de serviço (8%)</span>
+                <span id="payFee">R$ 1,20</span>
+            </div>
             <div class="cart-line total">
                 <span class="label">Total a pagar</span>
-                <span class="value" id="payTotal">R$ 15,00</span>
+                <span class="value" id="payTotal">R$ 16,20</span>
             </div>
         </div>
 
@@ -1111,6 +1119,16 @@ function changeDonation(delta) {
     updateDonation();
 }
 
+const SERVICE_FEE = 0.08; // 8%
+
+function calcTotal() {
+    const subtotal = donationQty * DONATION_PRICE;
+    const fee = subtotal * SERVICE_FEE;
+    return { subtotal, fee, total: subtotal + fee };
+}
+
+function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+
 function updateDonation() {
     const card = document.getElementById('donationCard');
     const btn = document.getElementById('btnAddDonation');
@@ -1118,8 +1136,10 @@ function updateDonation() {
     const impact = document.getElementById('donationImpact');
     const impactText = document.getElementById('donationImpactText');
     const cartLine = document.getElementById('cartDonationLine');
+    const cartFeeLine = document.getElementById('cartFeeLine');
     const cartLabel = document.getElementById('cartDonationLabel');
     const cartPrice = document.getElementById('cartDonationPrice');
+    const cartFee = document.getElementById('cartFee');
     const cartTotal = document.getElementById('cartTotal');
     const finalizeText = document.getElementById('btnFinalizeText');
 
@@ -1130,12 +1150,14 @@ function updateDonation() {
         impact.style.display = 'block';
         impactText.innerHTML = 'Você está doando <strong>' + donationQty + ' lata' + (donationQty > 1 ? 's' : '') + ' de leite</strong> que alimentará' + (donationQty > 1 ? 'ão' : '') + ' famílias em Santos!';
 
-        const total = donationQty * DONATION_PRICE;
+        const { subtotal, fee, total } = calcTotal();
         cartLine.style.display = 'flex';
+        cartFeeLine.style.display = 'flex';
         cartLabel.textContent = '🥛 ' + donationQty + 'x Lata de Leite (doação)';
-        cartPrice.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
-        cartTotal.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
-        finalizeText.textContent = 'Confirmar inscrição + doação de R$ ' + total.toFixed(2).replace('.', ',');
+        cartPrice.textContent = fmt(subtotal);
+        cartFee.textContent = fmt(fee);
+        cartTotal.textContent = fmt(total);
+        finalizeText.textContent = 'Prosseguir para pagamento — ' + fmt(total);
     } else {
         btn.style.display = 'inline-flex';
         counter.classList.remove('visible');
@@ -1143,6 +1165,7 @@ function updateDonation() {
         impact.style.display = 'none';
 
         cartLine.style.display = 'none';
+        cartFeeLine.style.display = 'none';
         cartTotal.textContent = 'R$ 0,00';
         finalizeText.textContent = 'Confirmar inscrição gratuita';
     }
@@ -1176,10 +1199,11 @@ function confirmFree() {
 
 // ===== PAYMENT =====
 function updatePaymentScreen() {
-    const total = donationQty * DONATION_PRICE;
+    const { subtotal, fee, total } = calcTotal();
     document.getElementById('payDonationLabel').textContent = '🥛 ' + donationQty + 'x Lata de Leite (doação)';
-    document.getElementById('payDonationPrice').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
-    document.getElementById('payTotal').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+    document.getElementById('payDonationPrice').textContent = fmt(subtotal);
+    document.getElementById('payFee').textContent = fmt(fee);
+    document.getElementById('payTotal').textContent = fmt(total);
 
     // Reset
     paymentMethod = null;
@@ -1226,13 +1250,13 @@ function updateSuccess() {
         now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
     if (donationQty > 0) {
-        const total = donationQty * DONATION_PRICE;
+        const { subtotal, fee, total } = calcTotal();
         document.getElementById('donationThankYou').style.display = 'block';
         document.getElementById('donationThankYouText').textContent =
-            'Obrigado! Você doou ' + donationQty + ' lata' + (donationQty > 1 ? 's' : '') + ' de leite (R$ ' + total.toFixed(2).replace('.', ',') + ')';
+            'Obrigado! Você doou ' + donationQty + ' lata' + (donationQty > 1 ? 's' : '') + ' de leite (' + fmt(subtotal) + ' + ' + fmt(fee) + ' taxa = ' + fmt(total) + ')';
         document.getElementById('sDonationRow').style.display = 'flex';
         document.getElementById('sDonation').textContent =
-            donationQty + 'x Lata de Leite — R$ ' + total.toFixed(2).replace('.', ',');
+            donationQty + 'x Lata de Leite ' + fmt(subtotal) + ' + taxa ' + fmt(fee) + ' = ' + fmt(total);
         document.getElementById('sPaymentRow').style.display = 'flex';
         document.getElementById('sPayment').textContent = paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito';
     } else {

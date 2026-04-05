@@ -392,10 +392,120 @@
             padding: 32px 24px; text-align: center;
         }
 
+        /* ===== PAYMENT ===== */
+        .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+        .payment-method {
+            background: var(--surface); border: 2px solid var(--surface-border);
+            border-radius: var(--radius-md); padding: 24px 16px; text-align: center;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .payment-method:hover, .payment-method.selected { border-color: var(--primary); }
+        .payment-method.selected { background: rgba(0,230,118,0.05); }
+        .payment-method i { font-size: 2rem; margin-bottom: 10px; color: var(--text-muted); transition: color 0.3s; }
+        .payment-method.selected i { color: var(--primary); }
+        .payment-method h4 { font-size: 0.95rem; margin-bottom: 4px; }
+        .payment-method p { font-size: 0.75rem; color: var(--text-secondary); }
+
+        .pix-section, .card-section { display: none; animation: slideDown 0.3s ease; }
+        .pix-section.visible, .card-section.visible { display: block; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .pix-qr-area {
+            text-align: center; background: var(--surface); border: 1px solid var(--surface-border);
+            border-radius: var(--radius-lg); padding: 32px; margin-bottom: 20px;
+        }
+        .pix-qr-placeholder {
+            width: 200px; height: 200px; margin: 0 auto 16px; background: white;
+            border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
+        }
+        .pix-code {
+            background: var(--secondary); padding: 12px 16px; border-radius: var(--radius-sm);
+            font-family: monospace; font-size: 0.75rem; color: var(--text-secondary);
+            word-break: break-all; margin-bottom: 12px;
+        }
+        .copy-btn {
+            display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px;
+            background: rgba(0,230,118,0.1); border: 1px solid var(--primary);
+            color: var(--primary); border-radius: var(--radius-sm); cursor: pointer;
+            font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(0,230,118,0.2); }
+
+        /* ===== EVENT INFO (from index) ===== */
+        .event-info-section { padding: 0 24px 40px; max-width: 1200px; margin: 0 auto; }
+        .event-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 32px; }
+        @media (max-width: 800px) { .event-two-col { grid-template-columns: 1fr; } }
+        .event-description {
+            background: var(--surface); border: 1px solid var(--surface-border);
+            border-radius: var(--radius-lg); padding: 28px;
+        }
+        .event-description h3 {
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .event-description h3 i { color: var(--primary); }
+        .event-description p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; }
+
+        .modality-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+        .modality-item {
+            display: flex; align-items: center; gap: 14px; background: var(--secondary);
+            border: 1px solid var(--surface-border); border-radius: var(--radius-md); padding: 14px 16px;
+        }
+        .modality-item-icon {
+            width: 42px; height: 42px; border-radius: var(--radius-sm); background: rgba(0,230,118,0.1);
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+            color: var(--primary); flex-shrink: 0;
+        }
+        .modality-item h4 { font-size: 0.95rem; margin-bottom: 2px; }
+        .modality-item p { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
+
+        .map-section {
+            background: var(--surface); border: 1px solid var(--surface-border);
+            border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;
+        }
+        .map-section h3 {
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; padding: 20px 24px 0;
+            margin-bottom: 4px; display: flex; align-items: center; gap: 10px;
+        }
+        .map-section h3 i { color: var(--primary); }
+        .map-section .map-subtitle { font-size: 0.8rem; color: var(--text-muted); padding: 0 24px 16px; }
+        .map-section iframe { width: 100%; flex: 1; min-height: 350px; border: none; border-top: 1px solid var(--surface-border); }
+        .map-legend { display: flex; gap: 16px; padding: 14px 24px; border-top: 1px solid var(--surface-border); flex-wrap: wrap; }
+        .map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-secondary); }
+        .map-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+        .info-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .info-card {
+            background: var(--surface); border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md); padding: 20px; text-align: center; transition: all 0.3s;
+        }
+        .info-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-glow); }
+        .info-card-icon {
+            width: 48px; height: 48px; margin: 0 auto 12px; background: rgba(0,230,118,0.1);
+            border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: var(--primary);
+        }
+        .info-card-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .info-card-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; }
+
+        .spots-bar { background: var(--surface); border: 1px solid var(--surface-border); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 24px; }
+        .spots-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; }
+        .spots-count { color: var(--warning); font-weight: 600; }
+        .spots-progress { height: 6px; background: var(--secondary); border-radius: 3px; overflow: hidden; }
+        .spots-progress-fill { height: 100%; width: 87%; background: var(--gradient-primary); border-radius: 3px; }
+
+        .kit-includes { background: var(--surface); border: 1px solid var(--surface-border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 32px; }
+        .kit-includes h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .kit-includes h3 i { color: var(--primary); }
+        .kit-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .kit-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--secondary); border-radius: var(--radius-sm); font-size: 0.9rem; }
+        .kit-item i { color: var(--primary); font-size: 0.8rem; }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
             .form-row, .form-row-3 { grid-template-columns: 1fr; }
             .modality-options { grid-template-columns: 1fr; }
+            .payment-methods { grid-template-columns: 1fr; }
             .donation-body { flex-direction: column; text-align: center; }
             .hero { height: 50vh; min-height: 350px; }
             .event-title { font-size: 2rem; }
@@ -447,45 +557,103 @@
         </div>
     </div>
 
-    <div style="padding:0 24px 40px;max-width:1200px;margin:0 auto;">
-        <!-- Donation banner on landing -->
+    <div class="event-info-section">
+        <!-- Donation banner -->
         <div style="background:linear-gradient(135deg,rgba(255,109,0,0.08) 0%,rgba(255,61,0,0.04) 100%);border:1px solid rgba(255,109,0,0.2);border-radius:var(--radius-lg);padding:24px;margin-bottom:32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
             <div style="font-size:2.5rem;">🥛</div>
             <div style="flex:1;min-width:200px;">
                 <h3 style="font-family:'Space Grotesk';font-size:1.1rem;margin-bottom:4px;">Solidariedade na corrida!</h3>
-                <p style="font-size:0.88rem;color:var(--text-secondary);">Na sua inscrição, você pode adicionar <strong style="color:var(--accent);">1 lata de leite</strong> para doação. Cada lata será destinada a instituições de Santos.</p>
+                <p style="font-size:0.88rem;color:var(--text-secondary);">Na sua inscrição, você pode adicionar <strong style="color:var(--accent);">latas de leite</strong> para doação. Cada lata será destinada a instituições de Santos.</p>
             </div>
             <button class="btn-primary" onclick="goTo('form')" style="padding:12px 28px;font-size:0.9rem;box-shadow:none;background:var(--gradient-accent);">
                 Inscrever e doar <i class="fas fa-heart"></i>
             </button>
         </div>
 
-        <!-- Info cards -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px;">
-            <div style="background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-md);padding:20px;text-align:center;">
-                <div style="width:48px;height:48px;margin:0 auto 12px;background:rgba(0,230,118,0.1);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--primary);"><i class="fas fa-tag"></i></div>
-                <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Valor</div>
-                <div style="font-family:'Space Grotesk';font-size:1.1rem;font-weight:600;color:var(--primary);">Gratuito</div>
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-tag"></i></div>
+                <div class="info-card-label">Valor</div>
+                <div class="info-card-value" style="color:var(--primary);">Gratuito</div>
             </div>
-            <div style="background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-md);padding:20px;text-align:center;">
-                <div style="width:48px;height:48px;margin:0 auto 12px;background:rgba(0,230,118,0.1);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--primary);"><i class="fas fa-route"></i></div>
-                <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Distância</div>
-                <div style="font-family:'Space Grotesk';font-size:1.1rem;font-weight:600;">10 km</div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-route"></i></div>
+                <div class="info-card-label">Distância</div>
+                <div class="info-card-value">10 km</div>
             </div>
-            <div style="background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-md);padding:20px;text-align:center;">
-                <div style="width:48px;height:48px;margin:0 auto 12px;background:rgba(0,230,118,0.1);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--primary);"><i class="fas fa-clock"></i></div>
-                <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Largada</div>
-                <div style="font-family:'Space Grotesk';font-size:1.1rem;font-weight:600;">07:00</div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-clock"></i></div>
+                <div class="info-card-label">Largada</div>
+                <div class="info-card-value">07:00</div>
             </div>
-            <div style="background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-md);padding:20px;text-align:center;">
-                <div style="width:48px;height:48px;margin:0 auto 12px;background:rgba(255,109,0,0.1);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--accent);"><i class="fas fa-heart"></i></div>
-                <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Doação</div>
-                <div style="font-family:'Space Grotesk';font-size:1.1rem;font-weight:600;color:var(--accent);">Opcional</div>
+            <div class="info-card">
+                <div class="info-card-icon" style="background:rgba(255,109,0,0.1);"><i class="fas fa-heart" style="color:var(--accent);"></i></div>
+                <div class="info-card-label">Doação</div>
+                <div class="info-card-value" style="color:var(--accent);">Opcional</div>
+            </div>
+        </div>
+
+        <div class="spots-bar">
+            <div class="spots-header">
+                <span>Vagas preenchidas</span>
+                <span class="spots-count"><i class="fas fa-fire"></i> Restam 3.120 vagas</span>
+            </div>
+            <div class="spots-progress"><div class="spots-progress-fill"></div></div>
+        </div>
+
+        <div class="event-two-col">
+            <div class="event-description">
+                <h3><i class="fas fa-info-circle"></i> Sobre o Evento</h3>
+                <p>A <strong>40ª edição</strong> da prova pedestre 10 KM TRIBUNA será realizada na cidade de <strong>Santos</strong> no dia <strong>17 de maio de 2026</strong>, com qualquer condição climática.</p>
+                <p>A participação está aberta a pessoas de todos os gêneros devidamente inscritas. A idade mínima é de 18 anos completos na data da prova. Capacidade máxima de <strong>24.000 participantes</strong>.</p>
+                <div style="font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:12px;margin-top:20px;">Modalidades disponíveis:</div>
+                <div class="modality-list">
+                    <div class="modality-item">
+                        <div class="modality-item-icon"><i class="fas fa-bolt"></i></div>
+                        <div><h4>10km Corrida</h4><p>Corrida competitiva com medida oficial de 10.000 metros.</p></div>
+                    </div>
+                    <div class="modality-item">
+                        <div class="modality-item-icon"><i class="fas fa-walking"></i></div>
+                        <div><h4>10km Caminhada</h4><p>Caminhada participativa. Aberta a todos os públicos.</p></div>
+                    </div>
+                </div>
+                <div style="margin-top:20px;padding:14px;background:var(--secondary);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text-secondary);line-height:1.6;">
+                    <i class="fas fa-map-pin" style="color:var(--primary);margin-right:6px;"></i>
+                    <strong style="color:var(--text);">Largada:</strong> Rua João Pessoa, nº 129 — Santos<br>
+                    <i class="fas fa-flag-checkered" style="color:var(--accent);margin-right:6px;"></i>
+                    <strong style="color:var(--text);">Chegada:</strong> Av. Presidente Wilson / Av. Ana Costa<br>
+                    <i class="fas fa-tint" style="color:#00B0FF;margin-right:6px;"></i>
+                    <strong style="color:var(--text);">Dispersão:</strong> Canal 2 (Av. Bernardino de Campos) — hidratação e medalhas
+                </div>
+            </div>
+
+            <div class="map-section">
+                <h3><i class="fas fa-map-marked-alt"></i> Percurso Oficial</h3>
+                <p class="map-subtitle">Mapa interativo com o trajeto completo da prova</p>
+                <iframe src="https://www.google.com/maps/d/embed?mid=14FxTSYGx2zTAm1EpDEVuz1gjMk1tIgg&ehbc=2E312F&ll=-23.9419,-46.3398&z=14" allowfullscreen loading="lazy"></iframe>
+                <div class="map-legend">
+                    <div class="map-legend-item"><div class="map-legend-dot" style="background:#00E676;"></div> Largada</div>
+                    <div class="map-legend-item"><div class="map-legend-dot" style="background:#FF6D00;"></div> Chegada</div>
+                    <div class="map-legend-item"><div class="map-legend-dot" style="background:#00B0FF;"></div> Hidratação</div>
+                    <div class="map-legend-item"><div class="map-legend-dot" style="background:#FF5252;"></div> Apoio médico</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kit-includes">
+            <h3><i class="fas fa-box-open"></i> O que está incluso no Kit</h3>
+            <div class="kit-items">
+                <div class="kit-item"><i class="fas fa-check"></i> Número de peito com chip</div>
+                <div class="kit-item"><i class="fas fa-check"></i> Camiseta do evento</div>
+                <div class="kit-item"><i class="fas fa-check"></i> Mochila personalizada</div>
+                <div class="kit-item"><i class="fas fa-check"></i> Medalha de conclusão</div>
+                <div class="kit-item"><i class="fas fa-check"></i> Brindes dos patrocinadores</div>
+                <div class="kit-item"><i class="fas fa-check"></i> Hidratação no percurso</div>
             </div>
         </div>
 
         <div style="text-align:center;padding:20px 0;">
-            <button class="btn-primary" onclick="goTo('form')"><i class="fas fa-ticket-alt"></i> Inscreva-se agora</button>
+            <button class="btn-primary" onclick="goTo('form')"><i class="fas fa-ticket-alt"></i> Inscreva-se grátis</button>
         </div>
     </div>
 </div>
@@ -696,7 +864,125 @@
     </div>
 </div>
 
-<!-- ==================== SCREEN 4: SUCCESS ==================== -->
+<!-- ==================== SCREEN 4: PAYMENT (only when donation > 0) ==================== -->
+<div class="screen" id="screen-payment">
+    <div class="stepper-container">
+        <div class="stepper">
+            <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div></div>
+            <div class="step-line active"></div>
+            <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div></div>
+            <div class="step-line active"></div>
+            <div class="step active"><div class="step-circle">3</div><span class="step-label">Pagamento</span></div>
+            <div class="step-line"></div>
+            <div class="step"><div class="step-circle">4</div><span class="step-label">Confirmação</span></div>
+        </div>
+    </div>
+
+    <div class="content">
+        <button class="btn-back" onclick="goTo('donation')"><i class="fas fa-arrow-left"></i> Voltar</button>
+
+        <div class="content-header">
+            <h2>Pagamento da Doação</h2>
+            <p>Escolha a forma de pagamento para processar sua doação</p>
+        </div>
+
+        <!-- Order summary -->
+        <div class="cart-summary" style="margin-bottom:24px;">
+            <h3 style="font-family:'Space Grotesk';font-size:1rem;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--surface-border);">
+                <i class="fas fa-receipt" style="color:var(--primary);margin-right:8px;"></i>Resumo do pedido
+            </h3>
+            <div class="cart-line">
+                <span class="label">Inscrição — 40ª 10K Tribuna FM</span>
+                <span style="color:var(--primary);font-weight:600;">Gratuito</span>
+            </div>
+            <div class="cart-line donation-line">
+                <span class="label" id="payDonationLabel">🥛 1x Lata de Leite (doação)</span>
+                <span id="payDonationPrice">R$ 15,00</span>
+            </div>
+            <div class="cart-line total">
+                <span class="label">Total a pagar</span>
+                <span class="value" id="payTotal">R$ 15,00</span>
+            </div>
+        </div>
+
+        <div class="section-title"><i class="fas fa-credit-card"></i> Forma de pagamento</div>
+        <div class="payment-methods">
+            <div class="payment-method" id="pay-pix" onclick="selectPayment('pix')">
+                <i class="fas fa-qrcode"></i>
+                <h4>PIX</h4>
+                <p>Aprovação instantânea</p>
+            </div>
+            <div class="payment-method" id="pay-card" onclick="selectPayment('card')">
+                <i class="fas fa-credit-card"></i>
+                <h4>Cartão de Crédito</h4>
+                <p>Pagamento à vista</p>
+            </div>
+        </div>
+
+        <!-- PIX Section -->
+        <div class="pix-section" id="pixSection">
+            <div class="pix-qr-area">
+                <div class="pix-qr-placeholder">
+                    <svg viewBox="0 0 200 200" width="170" height="170">
+                        <rect fill="#000" x="10" y="10" width="40" height="40"/><rect fill="#000" x="150" y="10" width="40" height="40"/>
+                        <rect fill="#000" x="10" y="150" width="40" height="40"/><rect fill="#000" x="24" y="24" width="12" height="12"/>
+                        <rect fill="#000" x="164" y="24" width="12" height="12"/><rect fill="#000" x="24" y="164" width="12" height="12"/>
+                        <rect fill="#000" x="60" y="10" width="8" height="8"/><rect fill="#000" x="76" y="10" width="8" height="8"/>
+                        <rect fill="#000" x="92" y="18" width="8" height="8"/><rect fill="#000" x="108" y="10" width="8" height="8"/>
+                        <rect fill="#000" x="60" y="60" width="8" height="8"/><rect fill="#000" x="76" y="60" width="8" height="8"/>
+                        <rect fill="#000" x="92" y="60" width="8" height="8"/><rect fill="#000" x="108" y="60" width="8" height="8"/>
+                        <rect fill="#000" x="76" y="76" width="8" height="8"/><rect fill="#000" x="92" y="92" width="16" height="16"/>
+                        <rect fill="#000" x="60" y="124" width="8" height="8"/><rect fill="#000" x="92" y="124" width="8" height="8"/>
+                        <rect fill="#000" x="60" y="150" width="8" height="8"/><rect fill="#000" x="92" y="150" width="8" height="8"/>
+                        <rect fill="#000" x="150" y="150" width="8" height="8"/><rect fill="#000" x="174" y="150" width="8" height="8"/>
+                    </svg>
+                </div>
+                <p style="font-size:0.9rem;margin-bottom:12px;color:var(--text-secondary);">Escaneie o QR Code ou copie o código PIX</p>
+                <div class="pix-code">00020126580014br.gov.bcb.pix0136doacao-10ktribuna-2026520400005303986540515005802BR6007SANTOS</div>
+                <button class="copy-btn" onclick="showToast('Código PIX copiado!')"><i class="fas fa-copy"></i> Copiar código PIX</button>
+            </div>
+        </div>
+
+        <!-- Card Section -->
+        <div class="card-section" id="cardSection">
+            <div class="form-group">
+                <label>Número do cartão <span class="required">*</span></label>
+                <input type="text" class="form-input" placeholder="0000 0000 0000 0000">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Validade <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="MM/AA">
+                </div>
+                <div class="form-group">
+                    <label>CVV <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="000">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Nome no cartão <span class="required">*</span></label>
+                <input type="text" class="form-input" placeholder="Conforme impresso no cartão">
+            </div>
+            <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:var(--radius-sm);padding:12px 16px;font-size:0.82rem;color:var(--text-secondary);">
+                <i class="fas fa-info-circle" style="color:var(--primary);margin-right:6px;"></i>
+                Pagamento à vista (sem parcelamento)
+            </div>
+        </div>
+
+        <div style="margin-top:28px;text-align:center;">
+            <button class="btn-primary" id="btnPay" onclick="processPayment()" style="display:none;width:100%;max-width:400px;">
+                <i class="fas fa-lock"></i> Finalizar pagamento
+            </button>
+        </div>
+
+        <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:16px;">
+            <i class="fas fa-shield-alt" style="margin-right:4px;"></i>
+            Pagamento seguro. Sua doação será destinada integralmente às instituições beneficentes.
+        </p>
+    </div>
+</div>
+
+<!-- ==================== SCREEN 5: SUCCESS ==================== -->
 <div class="screen" id="screen-success">
     <div class="success-container">
         <div class="success-icon"><i class="fas fa-check"></i></div>
@@ -720,6 +1006,10 @@
                 <div class="purchase-detail-row" id="sDonationRow" style="display:none;">
                     <span class="label">Doação</span>
                     <span style="color:var(--accent);font-weight:600;" id="sDonation">—</span>
+                </div>
+                <div class="purchase-detail-row" id="sPaymentRow" style="display:none;">
+                    <span class="label">Pagamento</span>
+                    <span id="sPayment">—</span>
                 </div>
                 <div class="purchase-detail-row"><span class="label">Data</span><span id="sDate">—</span></div>
             </div>
@@ -751,6 +1041,7 @@
 let modality = null;
 let shirtSize = null;
 let donationQty = 0;
+let paymentMethod = null;
 const DONATION_PRICE = 15;
 
 // ===== NAVIGATION =====
@@ -759,6 +1050,8 @@ function goTo(screen) {
     document.getElementById('screen-' + screen).classList.add('active');
     window.scrollTo(0, 0);
     document.getElementById('mainFooter').style.display = screen === 'landing' ? 'block' : 'none';
+
+    if (screen === 'payment') updatePaymentScreen();
 }
 
 // ===== MODALITY =====
@@ -857,25 +1150,69 @@ function updateDonation() {
     document.getElementById('donationQty').textContent = donationQty;
 }
 
-// ===== FINALIZE =====
+// ===== FINALIZE (from donation screen) =====
 function finalize() {
+    if (donationQty > 0) {
+        // Has donation → go to payment
+        goTo('payment');
+    } else {
+        // Free only → confirm directly
+        confirmFree();
+    }
+}
+
+function confirmFree() {
     const loading = document.getElementById('loading');
     const loadingText = document.getElementById('loadingText');
     loading.classList.add('visible');
     loadingText.textContent = 'Confirmando inscrição...';
-
-    if (donationQty > 0) {
-        setTimeout(() => { loadingText.textContent = 'Processando doação...'; }, 800);
-    }
-    setTimeout(() => { loadingText.textContent = 'Gerando protocolo...'; }, 1500);
-
+    setTimeout(() => { loadingText.textContent = 'Gerando protocolo...'; }, 1000);
     setTimeout(() => {
         loading.classList.remove('visible');
         updateSuccess();
         goTo('success');
-    }, 2200);
+    }, 1800);
 }
 
+// ===== PAYMENT =====
+function updatePaymentScreen() {
+    const total = donationQty * DONATION_PRICE;
+    document.getElementById('payDonationLabel').textContent = '🥛 ' + donationQty + 'x Lata de Leite (doação)';
+    document.getElementById('payDonationPrice').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+    document.getElementById('payTotal').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+
+    // Reset
+    paymentMethod = null;
+    document.querySelectorAll('.payment-method').forEach(c => c.classList.remove('selected'));
+    document.getElementById('pixSection').classList.remove('visible');
+    document.getElementById('cardSection').classList.remove('visible');
+    document.getElementById('btnPay').style.display = 'none';
+}
+
+function selectPayment(method) {
+    paymentMethod = method;
+    document.querySelectorAll('.payment-method').forEach(c => c.classList.remove('selected'));
+    document.getElementById('pay-' + method).classList.add('selected');
+    document.getElementById('pixSection').classList.toggle('visible', method === 'pix');
+    document.getElementById('cardSection').classList.toggle('visible', method === 'card');
+    document.getElementById('btnPay').style.display = 'inline-flex';
+}
+
+function processPayment() {
+    const loading = document.getElementById('loading');
+    const loadingText = document.getElementById('loadingText');
+    loading.classList.add('visible');
+    loadingText.textContent = 'Processando pagamento...';
+    setTimeout(() => { loadingText.textContent = 'Confirmando doação...'; }, 1000);
+    setTimeout(() => { loadingText.textContent = 'Gerando protocolo...'; }, 2000);
+    setTimeout(() => {
+        loading.classList.remove('visible');
+        updateSuccess();
+        goTo('success');
+    }, 2800);
+}
+
+// ===== SUCCESS =====
 function updateSuccess() {
     const modNames = { corrida: '10km Corrida', caminhada: '10km Caminhada' };
     const proto = 'RK-2026-FREE-' + Math.floor(10000 + Math.random() * 90000);
@@ -896,9 +1233,12 @@ function updateSuccess() {
         document.getElementById('sDonationRow').style.display = 'flex';
         document.getElementById('sDonation').textContent =
             donationQty + 'x Lata de Leite — R$ ' + total.toFixed(2).replace('.', ',');
+        document.getElementById('sPaymentRow').style.display = 'flex';
+        document.getElementById('sPayment').textContent = paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito';
     } else {
         document.getElementById('donationThankYou').style.display = 'none';
         document.getElementById('sDonationRow').style.display = 'none';
+        document.getElementById('sPaymentRow').style.display = 'none';
     }
 }
 

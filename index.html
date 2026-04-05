@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <style>
         :root {
             --primary: #00E676;
@@ -710,6 +711,17 @@
             color: var(--text-secondary);
             line-height: 1.4;
         }
+        .type-card-spots {
+            margin-top: 10px;
+            padding: 6px 12px;
+            background: rgba(0,230,118,0.08);
+            border: 1px solid rgba(0,230,118,0.25);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: inline-block;
+        }
 
         .group-size-section {
             display: none;
@@ -765,7 +777,21 @@
             font-size: 2.5rem;
             font-weight: 700;
             min-width: 60px;
+            width: 90px;
             text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            outline: none;
+            -moz-appearance: textfield;
+        }
+        .counter-value::-webkit-outer-spin-button,
+        .counter-value::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .counter-value:focus {
+            border-bottom: 2px solid var(--primary);
         }
 
         .counter-label {
@@ -894,6 +920,126 @@
             color: var(--text-muted);
             text-decoration: line-through;
             font-weight: 400;
+        }
+
+        /* ===== GROUP KIT QUANTITY SELECTOR ===== */
+        .group-kit-section { display: none; }
+
+        /* ===== GROUP NAME BANNER ===== */
+        .group-name-banner {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,230,118,0.08);
+            border: 1px solid rgba(0,230,118,0.2);
+            border-radius: var(--radius-md);
+            padding: 12px 18px;
+            margin-bottom: 20px;
+        }
+        .group-name-banner.visible { display: flex; }
+        .group-name-banner i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        .group-name-banner .gnb-text {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+        .group-name-banner .gnb-name {
+            font-weight: 700;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .group-kit-section.visible { display: block; }
+
+        .group-kit-hint {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .group-kit-card {
+            background: var(--surface);
+            border: 2px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .group-kit-card.has-qty {
+            border-color: var(--primary);
+            background: rgba(0,230,118,0.05);
+        }
+
+        .group-kit-card .kit-info { flex: 1; }
+
+        .group-kit-counter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .group-kit-counter .counter-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+        }
+
+        .group-kit-counter .counter-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 32px;
+            width: 56px;
+            text-align: center;
+            color: var(--text);
+            background: transparent;
+            border: none;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+        .group-kit-counter .counter-val::-webkit-outer-spin-button,
+        .group-kit-counter .counter-val::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .group-kit-counter .counter-val:focus {
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .group-kit-progress {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .group-kit-progress .gkp-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .group-kit-progress .gkp-count {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .group-kit-progress .gkp-count.complete {
+            color: var(--primary);
+        }
+
+        .group-kit-progress .gkp-count.incomplete {
+            color: var(--accent);
         }
 
         .category-select {
@@ -1267,6 +1413,10 @@
             justify-content: center;
             padding: 10px;
         }
+        .protocol-qr svg {
+            width: 100%;
+            height: 100%;
+        }
 
         .protocol-number {
             font-family: 'Space Grotesk', sans-serif;
@@ -1497,6 +1647,560 @@
             white-space: nowrap;
         }
 
+        /* ===== GROUP FILL: SECTION HEADERS ===== */
+        .gf-type-section {
+            margin-bottom: 28px;
+        }
+        .gf-type-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,230,118,0.08);
+            border: 1px solid rgba(0,230,118,0.2);
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            margin-bottom: 16px;
+        }
+        .gf-type-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .gf-type-header-left i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        .gf-type-header-left h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .gf-type-header-right {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .gf-type-header-right strong {
+            color: var(--primary);
+        }
+
+        /* ===== GROUP FILL: SEARCH ===== */
+        .gf-search {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .gf-search input {
+            width: 100%;
+            padding: 12px 18px 12px 42px;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .gf-search input:focus {
+            border-color: var(--primary);
+        }
+        .gf-search input::placeholder {
+            color: var(--text-muted);
+        }
+        .gf-search i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== GROUP FILL: MINI DASHBOARD ===== */
+        .gf-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 520px) {
+            .gf-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        .gf-dash-card {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+        .gf-dash-card.highlight {
+            border-color: rgba(0,230,118,0.4);
+            background: rgba(0,230,118,0.04);
+        }
+        .gf-dash-card .dash-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .gf-dash-card .dash-count {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .gf-dash-card.highlight .dash-count {
+            color: var(--primary);
+        }
+        .gf-dash-card .dash-value {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .gf-dash-card .dash-value strong {
+            color: var(--primary);
+        }
+        .gf-dash-card.dash-card-multa {
+            border-color: rgba(255,82,82,0.4);
+            background: rgba(255,82,82,0.06);
+        }
+        .gf-dash-card.dash-card-multa .dash-count {
+            color: #FF5252;
+        }
+        .gf-dash-card.dash-card-multa .dash-label {
+            color: #FF5252;
+        }
+
+        /* ===== GROUP FILL: DEADLINE ALERT ===== */
+        .gf-deadline-alert {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+        .gf-deadline-alert.gf-alert-warn {
+            background: rgba(255,193,7,0.08);
+            border: 2px solid rgba(255,193,7,0.5);
+        }
+        .gf-deadline-alert.gf-alert-critical {
+            background: rgba(255,82,82,0.1);
+            border: 2px solid rgba(255,82,82,0.6);
+            animation: pulseAlertBorder 1.2s ease-in-out infinite;
+        }
+        .gf-deadline-alert.gf-alert-expired {
+            background: rgba(255,82,82,0.15);
+            border: 2px solid #FF5252;
+        }
+        @keyframes pulseAlertBorder {
+            0%, 100% { border-color: rgba(255,82,82,0.6); }
+            50% { border-color: rgba(255,82,82,1); box-shadow: 0 0 16px rgba(255,82,82,0.25); }
+        }
+        .gf-alert-icon {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .gf-alert-warn .gf-alert-icon { color: #FFC107; }
+        .gf-alert-critical .gf-alert-icon { color: #FF5252; }
+        .gf-alert-expired .gf-alert-icon { color: #FF5252; }
+        .gf-alert-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+        .gf-alert-warn .gf-alert-title { color: #FFC107; }
+        .gf-alert-critical .gf-alert-title { color: #FF5252; }
+        .gf-alert-expired .gf-alert-title { color: #FF5252; }
+        .gf-alert-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        .gf-alert-multa {
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .gf-alert-warn .gf-alert-multa { background: rgba(255,193,7,0.12); color: #FFC107; }
+        .gf-alert-critical .gf-alert-multa { background: rgba(255,82,82,0.12); color: #FF5252; }
+        .gf-alert-expired .gf-alert-multa { background: rgba(255,82,82,0.18); color: #FF5252; }
+
+        /* ===== COLLAPSIBLE SECTIONS ===== */
+        .gf-collapsible {
+            margin-bottom: 16px;
+        }
+        .gf-collapsible-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            color: var(--text);
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .gf-collapsible-toggle:hover {
+            border-color: var(--primary);
+            background: rgba(0,230,118,0.03);
+        }
+        .gf-collapsible.open .gf-collapsible-toggle {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-color: var(--primary);
+        }
+        .gf-collapsible-toggle .toggle-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .gf-collapsible-toggle .toggle-left i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        .gf-collapsible-toggle .toggle-arrow {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+        .gf-collapsible.open .gf-collapsible-toggle .toggle-arrow {
+            transform: rotate(180deg);
+        }
+        .gf-collapsible-body {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--primary);
+            border-top: none;
+            border-bottom-left-radius: var(--radius-md);
+            border-bottom-right-radius: var(--radius-md);
+            padding: 20px;
+        }
+        .gf-collapsible.open .gf-collapsible-body {
+            display: block;
+        }
+
+        /* ===== LINK GENERATION & CSV UPLOAD ===== */
+        .link-gen-section {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .link-gen-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 14px;
+        }
+        .link-gen-section-title i {
+            color: var(--primary);
+        }
+        .link-type-card {
+            background: var(--bg);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .link-type-card:last-child {
+            margin-bottom: 0;
+        }
+        .link-type-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .link-type-header .type-name {
+            font-weight: 600;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .link-type-header .type-name .type-badge {
+            background: rgba(0,230,118,0.12);
+            color: var(--primary);
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .link-type-url {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .link-type-url input {
+            flex: 1;
+            background: var(--secondary);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-sm);
+            padding: 9px 12px;
+            font-family: monospace;
+            font-size: 0.78rem;
+            color: var(--primary);
+            outline: none;
+        }
+        .link-type-url input:focus {
+            border-color: var(--primary);
+        }
+        .link-type-url .copy-link-btn {
+            background: var(--primary);
+            color: var(--bg);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 9px 14px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .link-type-url .copy-link-btn:hover {
+            opacity: 0.85;
+        }
+        .link-slots-config {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .link-slots-config label {
+            white-space: nowrap;
+        }
+        .link-slots-config input[type="number"] {
+            width: 65px;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-sm);
+            padding: 6px 10px;
+            color: var(--text);
+            font-size: 0.82rem;
+            text-align: center;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+        .link-slots-config input[type="number"]::-webkit-outer-spin-button,
+        .link-slots-config input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .link-slots-config input[type="number"]:focus {
+            border-color: var(--primary);
+        }
+        .link-slots-config .slots-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* CSV Upload */
+        .csv-upload-area {
+            border: 2px dashed var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            margin-bottom: 16px;
+        }
+        .csv-upload-area:hover,
+        .csv-upload-area.drag-over {
+            border-color: var(--primary);
+            background: rgba(0,230,118,0.04);
+        }
+        .csv-upload-area i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .csv-upload-area .upload-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            margin-bottom: 4px;
+        }
+        .csv-upload-area .upload-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .csv-upload-area input[type="file"] {
+            display: none;
+        }
+
+        /* Imported Athletes Table */
+        .imported-athletes {
+            margin-top: 16px;
+        }
+        .imported-athletes-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .imported-athletes-header h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .imported-athletes-header h4 .count-badge {
+            background: var(--primary);
+            color: var(--bg);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .imported-athletes-header .clear-btn {
+            background: none;
+            border: 1px solid rgba(255,82,82,0.4);
+            color: #ff5252;
+            border-radius: var(--radius-sm);
+            padding: 5px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .imported-athletes-header .clear-btn:hover {
+            background: rgba(255,82,82,0.1);
+        }
+        .imported-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+        }
+        .imported-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+        .imported-table th {
+            background: var(--secondary);
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--surface-border);
+            white-space: nowrap;
+        }
+        .imported-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--surface-border);
+            color: var(--text);
+        }
+        .imported-table tr:last-child td {
+            border-bottom: none;
+        }
+        .imported-table tr:hover td {
+            background: rgba(0,230,118,0.04);
+        }
+        .imported-table .type-cell select {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            color: var(--text);
+            font-size: 0.8rem;
+            outline: none;
+        }
+        .imported-table .type-cell select:focus {
+            border-color: var(--primary);
+        }
+        .imported-table .remove-row-btn {
+            background: none;
+            border: none;
+            color: #ff5252;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 4px;
+            transition: opacity 0.2s;
+        }
+        .imported-table .remove-row-btn:hover {
+            opacity: 0.7;
+        }
+        .imported-table .slots-input {
+            width: 50px;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-sm);
+            padding: 4px 6px;
+            color: var(--text);
+            font-size: 0.82rem;
+            text-align: center;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+        .imported-table .slots-input::-webkit-outer-spin-button,
+        .imported-table .slots-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .imported-table .slots-input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Send links section */
+        .send-links-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,230,118,0.06);
+            border: 1px solid rgba(0,230,118,0.2);
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            margin-top: 16px;
+        }
+        .send-links-bar .send-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .send-links-bar .send-info strong {
+            color: var(--text);
+        }
+        .send-links-btn {
+            background: var(--primary);
+            color: var(--bg);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+        .send-links-btn:hover {
+            opacity: 0.85;
+        }
+        .send-links-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .athlete-card {
             background: var(--surface);
             border: 1px solid var(--surface-border);
@@ -1667,6 +2371,108 @@
             font-size: 0.82rem;
             font-weight: 500;
             margin-bottom: 24px;
+        }
+
+        .al-deadline {
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .al-deadline .al-deadline-title {
+            font-family: 'Space Grotesk';
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .al-deadline .al-deadline-sub {
+            font-size: 0.82rem;
+        }
+        /* Tranquilo: mais de 2 dias */
+        .al-deadline.level-ok {
+            background: rgba(0,230,118,0.08);
+            border: 1px solid rgba(0,230,118,0.25);
+        }
+        .al-deadline.level-ok .al-deadline-title { color: var(--primary); }
+        .al-deadline.level-ok .al-deadline-sub { color: var(--text-secondary); }
+        /* Atenção: entre 1 e 2 dias */
+        .al-deadline.level-warn {
+            background: rgba(255,193,7,0.12);
+            border: 2px solid rgba(255,193,7,0.5);
+        }
+        .al-deadline.level-warn .al-deadline-title { color: #FFC107; font-size: 1rem; }
+        .al-deadline.level-warn .al-deadline-sub { color: var(--text-secondary); }
+        /* Urgente: menos de 1 dia */
+        .al-deadline.level-urgent {
+            background: rgba(255,82,82,0.12);
+            border: 2px solid rgba(255,82,82,0.6);
+            animation: pulseUrgent 1.5s ease-in-out infinite;
+        }
+        .al-deadline.level-urgent .al-deadline-title { color: #FF5252; font-size: 1.1rem; }
+        .al-deadline.level-urgent .al-deadline-sub { color: #FF5252; font-weight: 500; }
+        /* Expirado */
+        .al-deadline.level-expired {
+            background: rgba(255,82,82,0.15);
+            border: 3px solid #FF5252;
+        }
+        .al-deadline.level-expired .al-deadline-title { color: #FF5252; font-size: 1.15rem; }
+        .al-deadline.level-expired .al-deadline-sub { color: #FF5252; font-weight: 600; }
+        @keyframes pulseUrgent {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,82,82,0.3); }
+            50% { box-shadow: 0 0 16px 4px rgba(255,82,82,0.25); }
+        }
+
+        /* ===== GUEST CARDS (athlete link) ===== */
+        .al-guest-card {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .al-guest-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .al-guest-header:hover { background: rgba(255,255,255,0.03); }
+        .al-guest-header .guest-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Space Grotesk';
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+        .al-guest-header .guest-num {
+            width: 28px; height: 28px;
+            background: var(--primary);
+            color: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .al-guest-header .guest-status {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .al-guest-header .guest-status.filled {
+            color: var(--primary);
+        }
+        .al-guest-body {
+            display: none;
+            padding: 0 18px 18px;
+        }
+        .al-guest-card.open .al-guest-body {
+            display: block;
+        }
+        .al-guest-card.open {
+            border-color: var(--primary);
         }
 
         /* ===== RESPONSIVE ===== */
@@ -1963,6 +2769,9 @@
             <span class="dot"></span>
             Inscrições abertas
         </div>
+        <button class="btn-login" onclick="goToScreen('login')" id="headerLoginBtn">
+            <i class="fas fa-user-circle"></i> <span class="login-label">Entrar</span>
+        </button>
         <button class="btn-primary" onclick="goToScreen('type')" style="padding:10px 24px;font-size:0.8rem;border-radius:20px;box-shadow:none;">
             Inscreva-se <i class="fas fa-arrow-right"></i>
         </button>
@@ -2004,7 +2813,7 @@
                 </div>
                 <div class="event-meta-item">
                     <i class="fas fa-users"></i>
-                    24.000 vagas
+                    25.000 vagas
                 </div>
             </div>
             <div style="margin-top:28px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
@@ -2041,12 +2850,37 @@
         </div>
 
         <div class="spots-bar">
-            <div class="spots-header">
-                <span>Vagas preenchidas</span>
-                <span class="spots-count"><i class="fas fa-fire"></i> Restam 3.120 vagas</span>
+            <div class="spots-header" style="margin-bottom:14px;">
+                <span style="font-weight:700;font-size:0.9rem;">Vagas disponíveis</span>
+                <span class="spots-count"><i class="fas fa-fire"></i> 25.000 vagas totais</span>
             </div>
-            <div class="spots-progress">
-                <div class="spots-progress-fill"></div>
+
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <i class="fas fa-user" style="color:var(--primary);font-size:0.85rem;width:18px;text-align:center;"></i>
+                <div style="flex:1;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">
+                        <span style="color:var(--text);">Individual</span>
+                        <span style="color:var(--text-secondary);font-weight:600;">8.430 / 10.000</span>
+                    </div>
+                    <div class="spots-progress">
+                        <div class="spots-progress-fill" style="width:84.3%;background:var(--gradient-primary);"></div>
+                    </div>
+                </div>
+                <span style="font-size:0.75rem;color:var(--warning);font-weight:600;white-space:nowrap;">1.570 restantes</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:10px;">
+                <i class="fas fa-users" style="color:var(--accent);font-size:0.85rem;width:18px;text-align:center;"></i>
+                <div style="flex:1;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">
+                        <span style="color:var(--text);">Grupo</span>
+                        <span style="color:var(--text-secondary);font-weight:600;">12.450 / 15.000</span>
+                    </div>
+                    <div class="spots-progress">
+                        <div class="spots-progress-fill" style="width:83%;background:linear-gradient(135deg, var(--accent), #00C853);"></div>
+                    </div>
+                </div>
+                <span style="font-size:0.75rem;color:var(--warning);font-weight:600;white-space:nowrap;">2.550 restantes</span>
             </div>
         </div>
 
@@ -2059,7 +2893,7 @@
                     A <strong>40ª edição</strong> da prova pedestre 10 KM TRIBUNA será realizada na cidade de <strong>Santos</strong> no dia <strong>17 de maio de 2026</strong>, com qualquer condição climática.
                 </p>
                 <p>
-                    A participação está aberta a pessoas de todos os gêneros devidamente inscritas. A idade mínima é de 18 anos completos na data da prova. Capacidade máxima de <strong>24.000 participantes</strong>.
+                    A participação está aberta a pessoas de todos os gêneros devidamente inscritas. A idade mínima é de 18 anos completos na data da prova. Capacidade máxima de <strong>25.000 participantes</strong>.
                 </p>
 
                 <div style="font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:12px;margin-top:20px;">Modalidades disponíveis:</div>
@@ -2068,7 +2902,7 @@
                         <div class="modality-item-icon"><i class="fas fa-bolt"></i></div>
                         <div>
                             <h4>10km Corrida</h4>
-                            <p>Corrida individual com medida oficial de 10.000 metros. Categorias competitivas Elite A, Elite B e Amador por faixa etária.</p>
+                            <p>Corrida individual com medida oficial de 10.000 metros. Pelotões: ELITE B, A, B, C, D e E organizados por pace.</p>
                         </div>
                     </div>
                     <div class="modality-item">
@@ -2168,19 +3002,65 @@
                 <div class="type-card-icon"><i class="fas fa-user"></i></div>
                 <h3>Individual</h3>
                 <p>Inscrição para 1 atleta com todos os dados preenchidos agora</p>
+                <div class="type-card-spots">
+                    <i class="fas fa-ticket-alt"></i> 1.570 vagas restantes
+                </div>
             </div>
             <div class="type-card" id="type-group" onclick="selectType('group')">
                 <div class="type-card-icon"><i class="fas fa-users"></i></div>
                 <h3>Grupo</h3>
                 <p>Garanta vagas para seu grupo e preencha os dados depois</p>
+                <div class="type-card-spots">
+                    <i class="fas fa-ticket-alt"></i> 2.550 vagas restantes
+                </div>
             </div>
         </div>
 
         <div class="group-size-section" id="groupSizeSection">
+            <div class="section-title"><i class="fas fa-users"></i> Nome do grupo</div>
+            <div style="margin-bottom:20px;">
+                <input type="text" class="form-input" id="groupName" placeholder="Ex: RunTeam Santos, Equipe Maratona..." style="text-align:center;">
+            </div>
+
+            <div class="section-title"><i class="fas fa-id-card"></i> Responsável pelo grupo</div>
+            <div style="margin-bottom:12px;">
+                <input type="text" class="form-input" id="groupResponsavel" placeholder="Nome completo do responsável" style="text-align:center;">
+            </div>
+            <div style="margin-bottom:8px;">
+                <input type="tel" class="form-input" id="groupPhone" placeholder="(00) 00000-0000" maxlength="15" oninput="maskPhone(this)" style="text-align:center;">
+            </div>
+
+            <div id="smsVerifySection" style="display:none; margin-bottom:20px;">
+                <div id="smsSendArea" style="text-align:center;">
+                    <button class="btn-outline" onclick="sendSmsCode()" id="btnSendSms" style="border-color:var(--primary);color:var(--primary);font-size:0.9rem;padding:10px 24px;">
+                        <i class="fas fa-sms"></i> Enviar código SMS
+                    </button>
+                </div>
+                <div id="smsCodeArea" style="display:none; margin-top:12px;">
+                    <p style="text-align:center; font-size:0.85rem; color:#ccc; margin-bottom:8px;">
+                        <i class="fas fa-lock"></i> Digite o código de 6 dígitos enviado para o celular informado
+                    </p>
+                    <div style="display:flex; gap:8px; justify-content:center; align-items:center;">
+                        <input type="text" class="form-input" id="smsCodeInput" placeholder="000000" maxlength="6" style="text-align:center; width:140px; font-size:1.2rem; letter-spacing:6px; font-weight:700;" oninput="this.value=this.value.replace(/\D/g,'')">
+                        <button class="btn-primary" onclick="verifySmsCode()" style="padding:10px 20px; font-size:0.9rem;">
+                            Verificar
+                        </button>
+                    </div>
+                    <p style="text-align:center; margin-top:8px;">
+                        <a href="#" onclick="sendSmsCode(); return false;" style="color:var(--accent); font-size:0.8rem;">Reenviar código</a>
+                    </p>
+                </div>
+                <div id="smsVerifiedBadge" style="display:none; text-align:center; margin-top:12px;">
+                    <span style="background:var(--success); color:#fff; padding:8px 20px; border-radius:20px; font-size:0.9rem; font-weight:600;">
+                        <i class="fas fa-check-circle"></i> Celular verificado com sucesso!
+                    </span>
+                </div>
+            </div>
+
             <div class="section-title"><i class="fas fa-user-plus"></i> Quantos atletas?</div>
             <div class="group-counter">
                 <button class="counter-btn" onclick="changeGroupSize(-1)" id="btnMinus"><i class="fas fa-minus"></i></button>
-                <div class="counter-value" id="groupSize">10</div>
+                <input type="number" class="counter-value" id="groupSize" value="10" min="10" onchange="onGroupSizeInput(this)" onkeydown="onGroupSizeKey(event)">
                 <button class="counter-btn" onclick="changeGroupSize(1)" id="btnPlus"><i class="fas fa-plus"></i></button>
             </div>
             <div class="counter-label">Mínimo 10 atletas — Sem limite</div>
@@ -2239,94 +3119,78 @@
 
 <!-- ==================== SCREEN 3: KIT & MODALITY ==================== -->
 <div class="screen" id="screen-kit">
-    <div class="stepper-container">
+    <div class="stepper-container" id="kitStepper">
         <div class="stepper">
             <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div></div>
             <div class="step-line active"></div>
-            <div class="step active"><div class="step-circle">2</div><span class="step-label">Kit</span></div>
+            <div class="step active"><div class="step-circle">2</div><span class="step-label">Inscrição</span></div>
             <div class="step-line"></div>
-            <div class="step"><div class="step-circle">3</div><span class="step-label">Atleta</span></div>
-            <div class="step-line"></div>
-            <div class="step"><div class="step-circle">4</div><span class="step-label">Pagamento</span></div>
+            <div class="step"><div class="step-circle">3</div><span class="step-label">Pagamento</span></div>
         </div>
     </div>
 
     <div class="content">
         <button class="btn-back" onclick="goToScreen('type')"><i class="fas fa-arrow-left"></i> Voltar</button>
 
+        <div class="group-name-banner" id="gnb-kit">
+            <i class="fas fa-users"></i>
+            <span class="gnb-text">Grupo: <span class="gnb-name" id="gnb-kit-name"></span></span>
+        </div>
+
         <div class="urgency-bar">
             <i class="fas fa-stopwatch"></i>
             <span>Sua reserva expira em <span class="timer" id="timer">14:59</span></span>
         </div>
 
-        <div class="section-title"><i class="fas fa-running"></i> Modalidade</div>
-        <div class="modality-options">
-            <div class="modality-card" id="mod-corrida" onclick="selectModality('corrida')">
-                <i class="fas fa-bolt"></i>
-                <h4>10km Corrida</h4>
-                <p>Competitivo</p>
+        <!-- ===== INDIVIDUAL: Atletas com formulário completo ===== -->
+        <div id="individualKitOptions">
+            <div class="section-title"><i class="fas fa-user-plus"></i> Dados do Atleta</div>
+            <div id="indAthletesContainer">
+                <!-- Athlete cards rendered via JS -->
             </div>
-            <div class="modality-card" id="mod-caminhada" onclick="selectModality('caminhada')">
-                <i class="fas fa-walking"></i>
-                <h4>10km Caminhada</h4>
-                <p>Participativo</p>
-            </div>
+
+            <button class="btn-outline" onclick="addIndividualAthlete()" style="margin-top:16px;width:100%;border-color:var(--primary);color:var(--primary);padding:14px;font-size:0.9rem;">
+                <i class="fas fa-plus"></i> Adicionar outro atleta
+            </button>
         </div>
 
-        <div class="section-title"><i class="fas fa-box"></i> Tipo de Kit</div>
-        <div class="kit-options">
-            <div class="kit-card" id="kit-basic" onclick="selectKit('basic')">
-                <div class="kit-radio"></div>
+        <!-- ===== GRUPO: Apenas quantidade por tipo de kit ===== -->
+        <div id="groupKitOptions" class="group-kit-section">
+            <div class="section-title"><i class="fas fa-box"></i> Quantidade por tipo de inscrição</div>
+            <p class="group-kit-hint">
+                Selecione quantos kits de cada tipo para o grupo de <strong id="groupKitTarget">10</strong> atletas.
+                <br>Modalidade, categoria e camiseta serão escolhidos por cada atleta individualmente.
+            </p>
+
+            <div class="group-kit-card" id="gk-card-individual">
                 <div class="kit-info">
-                    <h4>Kit Básico</h4>
+                    <h4>Inscrições Individuais</h4>
                     <p>Número de peito + chip + camiseta</p>
+                    <span style="color:var(--primary);font-family:'Space Grotesk';font-weight:700;font-size:1rem;">R$ 149,00</span>
                 </div>
-                <div class="kit-price">R$ 149,00</div>
-            </div>
-            <div class="kit-card" id="kit-premium" onclick="selectKit('premium')">
-                <div class="kit-radio"></div>
-                <div class="kit-info">
-                    <h4>Kit Premium</h4>
-                    <p>Básico + mochila exclusiva + boné</p>
-                </div>
-                <div class="kit-price">
-                    R$ 199,00
+                <div class="group-kit-counter">
+                    <button class="counter-btn" onclick="changeGroupKit('individual', -1)" type="button"><i class="fas fa-minus"></i></button>
+                    <input type="number" class="counter-val" id="groupKit-individual" value="0" min="0" onchange="onGroupKitInput('individual', this)" onkeydown="if(event.key==='Enter') this.blur()">
+                    <button class="counter-btn" onclick="changeGroupKit('individual', 1)" type="button"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
-            <div class="kit-card" id="kit-vip" onclick="selectKit('vip')">
-                <div class="kit-radio"></div>
-                <div class="kit-info">
-                    <h4>Kit VIP</h4>
-                    <p>Premium + acesso área VIP + fotos profissionais</p>
-                </div>
-                <div class="kit-price">
-                    R$ 299,00
-                </div>
-            </div>
-        </div>
 
-        <div class="section-title"><i class="fas fa-list"></i> Categoria</div>
-        <select class="category-select" id="categorySelect">
-            <option value="">Selecione sua categoria</option>
-            <option value="amador-18-29">Amador 18-29 anos</option>
-            <option value="amador-30-39">Amador 30-39 anos</option>
-            <option value="amador-40-49">Amador 40-49 anos</option>
-            <option value="amador-50-59">Amador 50-59 anos</option>
-            <option value="amador-60+">Amador 60+ anos (50% desc.)</option>
-            <option value="elite-a">Elite A</option>
-            <option value="elite-b">Elite B</option>
-            <option value="pcd">PCD — Pessoa com Deficiência (50% desc.)</option>
-        </select>
+            <div class="group-kit-card" id="gk-card-senior60">
+                <div class="kit-info">
+                    <h4>Inscrições 60+</h4>
+                    <p>Número de peito + chip + camiseta (50% desc.)</p>
+                    <span style="color:var(--primary);font-family:'Space Grotesk';font-weight:700;font-size:1rem;">R$ 74,50</span>
+                </div>
+                <div class="group-kit-counter">
+                    <button class="counter-btn" onclick="changeGroupKit('senior60', -1)" type="button"><i class="fas fa-minus"></i></button>
+                    <input type="number" class="counter-val" id="groupKit-senior60" value="0" min="0" onchange="onGroupKitInput('senior60', this)" onkeydown="if(event.key==='Enter') this.blur()">
+                    <button class="counter-btn" onclick="changeGroupKit('senior60', 1)" type="button"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
 
-        <div style="margin-top: 28px;">
-            <div class="section-title"><i class="fas fa-tshirt"></i> Tamanho da Camiseta</div>
-            <div class="shirt-sizes">
-                <button class="size-btn" onclick="selectSize(this, 'PP')">PP</button>
-                <button class="size-btn" onclick="selectSize(this, 'P')">P</button>
-                <button class="size-btn" onclick="selectSize(this, 'M')">M</button>
-                <button class="size-btn" onclick="selectSize(this, 'G')">G</button>
-                <button class="size-btn" onclick="selectSize(this, 'GG')">GG</button>
-                <button class="size-btn" onclick="selectSize(this, 'XG')">XG</button>
+            <div class="group-kit-progress">
+                <span class="gkp-label">Kits selecionados</span>
+                <span class="gkp-count incomplete" id="groupKitCount">0 / 10</span>
             </div>
         </div>
     </div>
@@ -2336,7 +3200,7 @@
             <span id="kitSummaryLabel">Selecione kit e modalidade</span>
             <span class="price" id="kitSummaryPrice"></span>
         </div>
-        <button class="btn-primary" onclick="goToScreen('athlete')">
+        <button class="btn-primary" onclick="advanceFromKit()">
             Continuar <i class="fas fa-arrow-right"></i>
         </button>
     </div>
@@ -2344,7 +3208,7 @@
 
 <!-- ==================== SCREEN 4: ATHLETE DATA ==================== -->
 <div class="screen" id="screen-athlete">
-    <div class="stepper-container">
+    <div class="stepper-container" id="athleteStepper">
         <div class="stepper">
             <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div></div>
             <div class="step-line active"></div>
@@ -2357,7 +3221,17 @@
     </div>
 
     <div class="content">
-        <button class="btn-back" onclick="goToScreen('kit')"><i class="fas fa-arrow-left"></i> Voltar</button>
+        <button class="btn-back" id="athleteBackBtn" onclick="goToScreen('kit')"><i class="fas fa-arrow-left"></i> Voltar</button>
+
+        <div class="urgency-bar urgency-bar-sync" id="athleteUrgencyBar">
+            <i class="fas fa-stopwatch"></i>
+            <span>Sua reserva expira em <span class="timer timer-sync">14:59</span></span>
+        </div>
+
+        <div class="group-name-banner" id="gnb-athlete">
+            <i class="fas fa-users"></i>
+            <span class="gnb-text">Grupo: <span class="gnb-name" id="gnb-athlete-name"></span></span>
+        </div>
 
         <div class="content-header">
             <h2 id="athleteScreenTitle">Dados do Atleta</h2>
@@ -2432,7 +3306,7 @@
             </div>
         </div>
 
-        <!-- Group notice -->
+        <!-- Group notice / resumo -->
         <div id="groupNotice" style="display:none;">
             <div style="background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-lg);padding:32px;margin-bottom:24px;">
                 <div style="text-align:center;margin-bottom:20px;">
@@ -2475,7 +3349,7 @@
                     </div>
                     <div style="background:var(--secondary);padding:12px 20px;border-radius:var(--radius-sm);font-size:0.85rem;">
                         <i class="fas fa-link" style="color:var(--primary);margin-right:6px;"></i>
-                        Link compartilhável
+                        Link compartilhável para cada atleta
                     </div>
                 </div>
             </div>
@@ -2489,9 +3363,9 @@
     </div>
 </div>
 
-<!-- ==================== SCREEN 5: PAYMENT ==================== -->
+<!-- ==================== SCREEN 5: PAYMENT / FATURAMENTO ==================== -->
 <div class="screen" id="screen-payment">
-    <div class="stepper-container">
+    <div class="stepper-container" id="paymentStepper">
         <div class="stepper">
             <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div></div>
             <div class="step-line active"></div>
@@ -2507,8 +3381,8 @@
         <button class="btn-back" id="paymentBackBtn" onclick="goToScreen('athlete')"><i class="fas fa-arrow-left"></i> Voltar</button>
 
         <div class="content-header">
-            <h2>Pagamento</h2>
-            <p>Escolha a forma de pagamento e finalize sua inscrição</p>
+            <h2 id="paymentScreenTitle">Pagamento</h2>
+            <p id="paymentScreenSubtitle">Escolha a forma de pagamento e finalize sua inscrição</p>
         </div>
 
         <div class="order-summary" id="orderSummary">
@@ -2537,34 +3411,141 @@
         <!-- Buyer checkbox -->
         <div class="checkbox-group" id="sameBuyerCheck" onclick="toggleSameBuyer()">
             <div class="custom-checkbox"></div>
-            <span class="checkbox-label">O comprador é o mesmo atleta inscrito</span>
+            <span class="checkbox-label">O responsável é o mesmo atleta inscrito</span>
         </div>
 
         <!-- Buyer form -->
         <div id="buyerForm">
-            <div class="section-title"><i class="fas fa-user-tie"></i> Dados do comprador</div>
+            <div class="section-title"><i class="fas fa-user-tie"></i> Dados do Responsável</div>
             <div class="form-row">
                 <div class="form-group">
                     <label>Nome completo <span class="required">*</span></label>
-                    <input type="text" class="form-input" id="buyerName" placeholder="Nome do comprador" value="Carlos Eduardo Santos">
+                    <input type="text" class="form-input" id="buyerName" placeholder="Nome do responsável">
                 </div>
                 <div class="form-group">
                     <label>CPF <span class="required">*</span></label>
-                    <input type="text" class="form-input" id="buyerCpf" placeholder="000.000.000-00" value="382.451.678-90">
+                    <input type="text" class="form-input" id="buyerCpf" placeholder="000.000.000-00">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>E-mail <span class="required">*</span></label>
-                    <input type="email" class="form-input" id="buyerEmail" placeholder="seu@email.com" value="carlos.santos@email.com">
+                    <input type="email" class="form-input" id="buyerEmail" placeholder="seu@email.com">
                 </div>
                 <div class="form-group">
                     <label>Celular <span class="required">*</span></label>
-                    <input type="tel" class="form-input" id="buyerPhone" placeholder="(00) 00000-0000" value="(13) 99876-5432">
+                    <input type="tel" class="form-input" id="buyerPhone" placeholder="(00) 00000-0000">
                 </div>
             </div>
         </div>
 
+        <!-- Nota Fiscal -->
+        <div style="margin-top:28px;">
+            <div class="section-title"><i class="fas fa-file-invoice"></i> Dados para emissão de Nota Fiscal</div>
+
+            <div class="checkbox-group" id="nfSameBuyerCheck" onclick="toggleNfSameBuyer()">
+                <div class="custom-checkbox" id="nfSameBuyerBox"></div>
+                <span class="checkbox-label">Usar mesmos dados do responsável</span>
+            </div>
+
+            <div id="nfForm">
+                <div style="display:flex;gap:10px;margin-bottom:16px;">
+                    <button type="button" class="gender-btn selected" id="nfTypePF" onclick="selectNfType('pf')">Pessoa Física</button>
+                    <button type="button" class="gender-btn" id="nfTypePJ" onclick="selectNfType('pj')">Pessoa Jurídica</button>
+                </div>
+
+                <!-- PF fields -->
+                <div id="nfPfFields">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nome completo <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nfPfName" placeholder="Nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label>CPF <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nfPfCpf" placeholder="000.000.000-00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail para receber a NF <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="nfPfEmail" placeholder="seu@email.com">
+                    </div>
+                </div>
+
+                <!-- PJ fields -->
+                <div id="nfPjFields" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Razão Social <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nfPjRazao" placeholder="Razão Social da empresa">
+                        </div>
+                        <div class="form-group">
+                            <label>CNPJ <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nfPjCnpj" placeholder="00.000.000/0000-00" onblur="fetchCnpjData()">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Inscrição Estadual</label>
+                            <input type="text" class="form-input" id="nfPjIe" placeholder="Inscrição Estadual (opcional)">
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail para receber a NF <span class="required">*</span></label>
+                            <input type="email" class="form-input" id="nfPjEmail" placeholder="financeiro@empresa.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address (common) -->
+                <div class="form-row">
+                    <div class="form-group" style="flex:0.35;">
+                        <label>CEP <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="nfCep" placeholder="00000-000">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Endereço <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="nfEndereco" placeholder="Rua, Avenida...">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:0.3;">
+                        <label>Número <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="nfNumero" placeholder="Nº">
+                    </div>
+                    <div class="form-group" style="flex:0.4;">
+                        <label>Complemento</label>
+                        <input type="text" class="form-input" id="nfComplemento" placeholder="Apto, Sala...">
+                    </div>
+                    <div class="form-group" style="flex:0.5;">
+                        <label>Bairro <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="nfBairro" placeholder="Bairro">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:1;">
+                        <label>Cidade <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="nfCidade" placeholder="Cidade">
+                    </div>
+                    <div class="form-group" style="flex:0.3;">
+                        <label>UF <span class="required">*</span></label>
+                        <select class="category-select" id="nfUf">
+                            <option value="">UF</option>
+                            <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                            <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                            <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                            <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                            <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                            <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                            <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                            <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                            <option value="SP" selected>SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="paymentMethodsSection">
         <div class="section-title" style="margin-top:28px;"><i class="fas fa-credit-card"></i> Forma de pagamento</div>
         <div class="payment-methods" id="paymentMethodsContainer">
             <div class="payment-method" id="pay-pix" onclick="selectPayment('pix')">
@@ -2720,6 +3701,31 @@
             <i class="fas fa-shield-alt" style="margin-right:4px;"></i>
             Pagamento seguro processado pela GoRunking. Seus dados estão protegidos.
         </p>
+        </div><!-- /paymentMethodsSection -->
+
+        <!-- Group: confirm reservation button (no payment now) -->
+        <div id="groupConfirmReservation" style="display:none;">
+            <div style="background:rgba(255,109,0,0.08);border:1px solid rgba(255,109,0,0.25);border-radius:var(--radius-md);padding:18px;margin-top:24px;margin-bottom:20px;">
+                <div style="display:flex;align-items:flex-start;gap:12px;">
+                    <i class="fas fa-info-circle" style="color:var(--accent);font-size:1.2rem;margin-top:2px;flex-shrink:0;"></i>
+                    <div>
+                        <h4 style="font-size:0.9rem;margin-bottom:6px;color:var(--accent);">Pagamento pendente</h4>
+                        <p style="font-size:0.84rem;color:var(--text-secondary);line-height:1.5;margin-bottom:0;">
+                            O pagamento será gerado automaticamente após o término do prazo de <strong>3 dias</strong> para preenchimento dos dados dos atletas. Os dados do responsável e da nota fiscal informados acima serão utilizados no faturamento.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align:center;">
+                <button class="btn-primary" onclick="confirmGroupRegistration()" style="font-size:1rem;padding:16px 40px;">
+                    <i class="fas fa-check-circle"></i> Confirmar reserva do grupo
+                </button>
+            </div>
+            <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:16px;">
+                <i class="fas fa-shield-alt" style="margin-right:4px;"></i>
+                Seus dados estão protegidos pela GoRunking.
+            </p>
+        </div>
     </div>
 </div>
 
@@ -2732,70 +3738,13 @@
         <h1 class="success-title">Inscrição confirmada!</h1>
         <p class="success-subtitle">Sua vaga na 40ª 10K Tribuna FM está garantida</p>
 
+        <div class="group-name-banner" id="gnb-success" style="justify-content:center;">
+            <i class="fas fa-users"></i>
+            <span class="gnb-text">Grupo: <span class="gnb-name" id="gnb-success-name"></span></span>
+        </div>
+
         <div class="protocol-card">
-            <div class="protocol-qr">
-                <svg viewBox="0 0 160 160" width="160" height="160">
-                    <rect fill="#000" x="8" y="8" width="32" height="32"/>
-                    <rect fill="#fff" x="14" y="14" width="20" height="20"/>
-                    <rect fill="#000" x="18" y="18" width="12" height="12"/>
-                    <rect fill="#000" x="120" y="8" width="32" height="32"/>
-                    <rect fill="#fff" x="126" y="14" width="20" height="20"/>
-                    <rect fill="#000" x="130" y="18" width="12" height="12"/>
-                    <rect fill="#000" x="8" y="120" width="32" height="32"/>
-                    <rect fill="#fff" x="14" y="126" width="20" height="20"/>
-                    <rect fill="#000" x="18" y="130" width="12" height="12"/>
-                    <rect fill="#000" x="48" y="8" width="6" height="6"/>
-                    <rect fill="#000" x="60" y="14" width="6" height="6"/>
-                    <rect fill="#000" x="72" y="8" width="6" height="6"/>
-                    <rect fill="#000" x="84" y="20" width="6" height="6"/>
-                    <rect fill="#000" x="96" y="8" width="6" height="6"/>
-                    <rect fill="#000" x="108" y="14" width="6" height="6"/>
-                    <rect fill="#000" x="48" y="48" width="6" height="6"/>
-                    <rect fill="#000" x="60" y="54" width="6" height="6"/>
-                    <rect fill="#000" x="72" y="48" width="6" height="6"/>
-                    <rect fill="#000" x="84" y="60" width="6" height="6"/>
-                    <rect fill="#000" x="96" y="48" width="6" height="6"/>
-                    <rect fill="#000" x="108" y="54" width="6" height="6"/>
-                    <rect fill="#000" x="8" y="54" width="6" height="6"/>
-                    <rect fill="#000" x="20" y="60" width="6" height="6"/>
-                    <rect fill="#000" x="32" y="48" width="6" height="6"/>
-                    <rect fill="#000" x="120" y="48" width="6" height="6"/>
-                    <rect fill="#000" x="132" y="60" width="6" height="6"/>
-                    <rect fill="#000" x="144" y="48" width="6" height="6"/>
-                    <rect fill="#000" x="48" y="72" width="6" height="6"/>
-                    <rect fill="#000" x="66" y="78" width="6" height="6"/>
-                    <rect fill="#000" x="78" y="72" width="12" height="12"/>
-                    <rect fill="#000" x="96" y="78" width="6" height="6"/>
-                    <rect fill="#000" x="108" y="72" width="6" height="6"/>
-                    <rect fill="#000" x="8" y="72" width="6" height="6"/>
-                    <rect fill="#000" x="26" y="78" width="6" height="6"/>
-                    <rect fill="#000" x="120" y="78" width="6" height="6"/>
-                    <rect fill="#000" x="144" y="72" width="6" height="6"/>
-                    <rect fill="#000" x="48" y="96" width="6" height="6"/>
-                    <rect fill="#000" x="60" y="102" width="6" height="6"/>
-                    <rect fill="#000" x="78" y="96" width="6" height="6"/>
-                    <rect fill="#000" x="96" y="108" width="6" height="6"/>
-                    <rect fill="#000" x="108" y="96" width="6" height="6"/>
-                    <rect fill="#000" x="8" y="102" width="6" height="6"/>
-                    <rect fill="#000" x="32" y="96" width="6" height="6"/>
-                    <rect fill="#000" x="120" y="96" width="6" height="6"/>
-                    <rect fill="#000" x="138" y="108" width="6" height="6"/>
-                    <rect fill="#000" x="48" y="120" width="6" height="6"/>
-                    <rect fill="#000" x="66" y="126" width="6" height="6"/>
-                    <rect fill="#000" x="84" y="120" width="6" height="6"/>
-                    <rect fill="#000" x="96" y="132" width="6" height="6"/>
-                    <rect fill="#000" x="108" y="120" width="6" height="6"/>
-                    <rect fill="#000" x="120" y="120" width="6" height="6"/>
-                    <rect fill="#000" x="132" y="132" width="6" height="6"/>
-                    <rect fill="#000" x="144" y="126" width="6" height="6"/>
-                    <rect fill="#000" x="48" y="144" width="6" height="6"/>
-                    <rect fill="#000" x="72" y="144" width="6" height="6"/>
-                    <rect fill="#000" x="90" y="144" width="6" height="6"/>
-                    <rect fill="#000" x="108" y="144" width="6" height="6"/>
-                    <rect fill="#000" x="126" y="144" width="6" height="6"/>
-                    <rect fill="#000" x="144" y="144" width="6" height="6"/>
-                </svg>
-            </div>
+            <div class="protocol-qr" id="protocolQrContainer"></div>
 
             <div class="protocol-number" id="protocolNumber">RK-2026-0517-48291</div>
             <div class="protocol-label">Protocolo da inscrição</div>
@@ -2808,6 +3757,10 @@
                 <div class="purchase-detail-row">
                     <span class="label">Modalidade</span>
                     <span id="successModality">10km Corrida</span>
+                </div>
+                <div class="purchase-detail-row">
+                    <span class="label">Pelotão</span>
+                    <span id="successPelotao">—</span>
                 </div>
                 <div class="purchase-detail-row">
                     <span class="label">Kit</span>
@@ -2856,6 +3809,26 @@
             </div>
         </div>
 
+        <!-- Email confirmation notice (shown after finalized group payment) -->
+        <div id="groupEmailNotice" style="display:none;background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.25);border-radius:var(--radius-md);padding:20px;margin-bottom:24px;text-align:left;">
+            <h4 style="color:var(--primary);margin-bottom:8px;">
+                <i class="fas fa-envelope-open-text"></i> Confirmações enviadas por e-mail
+            </h4>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:16px;">
+                O pagamento foi confirmado e um e-mail de confirmação de inscrição foi enviado automaticamente para todos os <strong id="groupEmailCount">0</strong> atletas do grupo.
+            </p>
+
+            <div style="background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-md);padding:16px;max-height:240px;overflow-y:auto;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                    <i class="fas fa-users" style="color:var(--primary);"></i>
+                    <span style="font-size:0.85rem;font-weight:600;">Atletas confirmados</span>
+                </div>
+                <ul style="list-style:none;margin:0;padding:0;" id="groupEmailList">
+                    <!-- Populated by JS -->
+                </ul>
+            </div>
+        </div>
+
         <div class="success-actions">
             <button class="btn-primary" onclick="showToast('Comprovante enviado para seu e-mail!')">
                 <i class="fas fa-envelope"></i> Enviar por e-mail
@@ -2875,6 +3848,11 @@
         <div class="content-header" style="margin-top:16px;">
             <h2>Cadastro dos Atletas</h2>
             <p>Preencha os dados de cada participante. O pagamento será gerado ao finalizar.</p>
+        </div>
+
+        <div class="group-name-banner visible" id="gnb-groupfill" style="justify-content:center;margin-bottom:16px;">
+            <i class="fas fa-users"></i>
+            <span class="gnb-text">Grupo: <span class="gnb-name" id="gnb-groupfill-name"></span></span>
         </div>
 
         <div class="group-fill-header">
@@ -3112,11 +4090,145 @@
             </div>
         </div>
 
+        <!-- Mini Dashboard -->
+        <div class="gf-dashboard" id="gfDashboard">
+            <div class="gf-dash-card" id="dashCardIndividual" style="display:none;">
+                <div class="dash-label">Inscrições Individuais</div>
+                <div class="dash-count" id="dashIndividualCount">0</div>
+                <div class="dash-value">R$ <span id="dashIndividualValue">0,00</span></div>
+            </div>
+            <div class="gf-dash-card" id="dashCardSenior" style="display:none;">
+                <div class="dash-label">Inscrições 60+</div>
+                <div class="dash-count" id="dashSeniorCount">0</div>
+                <div class="dash-value">R$ <span id="dashSeniorValue">0,00</span></div>
+            </div>
+            <div class="gf-dash-card dash-card-multa" id="dashCardMulta" style="display:none;">
+                <div class="dash-label">Multa (vagas pendentes)</div>
+                <div class="dash-count" id="dashMultaCount">0</div>
+                <div class="dash-value" style="color:var(--warning);">R$ <span id="dashMultaValue">0,00</span></div>
+            </div>
+            <div class="gf-dash-card highlight">
+                <div class="dash-label"><span id="dashFilledCount">0</span>/<span id="dashTotalCount">0</span> preenchidos</div>
+                <div class="dash-count" id="dashTotalValue">R$ 0,00</div>
+                <div class="dash-value" id="dashTotalLabel">Valor total estimado (com taxa)</div>
+            </div>
+        </div>
+        <div id="gfDeadlineAlert" style="display:none;"></div>
+
         <div class="group-progress">
             <div class="group-progress-bar">
                 <div class="group-progress-fill" id="gfProgressFill" style="width:0%"></div>
             </div>
             <div class="group-progress-text" id="gfProgressText">0/10 preenchidos</div>
+        </div>
+
+        <!-- ===== LINK DE INSCRIÇÃO DO GRUPO (collapsible) ===== -->
+        <div class="gf-collapsible" id="gfLinkCollapsible">
+            <button class="gf-collapsible-toggle" onclick="toggleGfCollapsible('gfLinkCollapsible')">
+                <span class="toggle-left">
+                    <i class="fas fa-link"></i>
+                    Link de inscrição do grupo
+                </span>
+                <i class="fas fa-chevron-down toggle-arrow"></i>
+            </button>
+            <div class="gf-collapsible-body">
+                <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:14px;">Compartilhe este link com os atletas do grupo para que preencham seus dados. Atletas com 60 anos ou mais receberão desconto de 50% automaticamente.</p>
+                <div id="linkTypeCards">
+                    <!-- Gerado via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== IMPORTAR LISTA CSV/EXCEL (collapsible) ===== -->
+        <div class="gf-collapsible" id="gfImportCollapsible">
+            <button class="gf-collapsible-toggle" onclick="toggleGfCollapsible('gfImportCollapsible')">
+                <span class="toggle-left">
+                    <i class="fas fa-file-upload"></i>
+                    Importar lista de atletas e enviar links
+                </span>
+                <i class="fas fa-chevron-down toggle-arrow"></i>
+            </button>
+            <div class="gf-collapsible-body">
+                <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:14px;">Faça upload de uma planilha Excel (.xlsx) ou CSV com os dados dos atletas. A planilha deve conter as colunas: <strong>Nome</strong>, <strong>E-mail</strong> e <strong>Qtd Inscritos</strong> (quantidade de inscrições permitidas no link de cada atleta).</p>
+
+                <div class="csv-upload-area" id="csvUploadArea" onclick="document.getElementById('csvFileInput').click()"
+                     ondragover="event.preventDefault();this.classList.add('drag-over')"
+                     ondragleave="this.classList.remove('drag-over')"
+                     ondrop="event.preventDefault();this.classList.remove('drag-over');handleCsvDrop(event)">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div class="upload-title">Arraste o arquivo aqui ou clique para selecionar</div>
+                    <div class="upload-hint">Formatos aceitos: .csv, .xlsx, .xls</div>
+                    <input type="file" id="csvFileInput" accept=".csv,.xlsx,.xls" onchange="handleCsvUpload(this.files[0])">
+                </div>
+
+                <div style="margin-bottom:12px;">
+                    <button class="btn-outline" onclick="downloadCsvTemplate()" style="font-size:0.8rem;padding:8px 16px;border-color:var(--primary);color:var(--primary);">
+                        <i class="fas fa-download"></i> Baixar modelo de planilha
+                    </button>
+                </div>
+
+                <!-- Tabela de atletas importados -->
+                <div class="imported-athletes" id="importedAthletesSection" style="display:none;">
+                    <div class="imported-athletes-header">
+                        <h4><i class="fas fa-users" style="color:var(--primary);"></i> Atletas importados <span class="count-badge" id="importedCount">0</span></h4>
+                        <button class="clear-btn" onclick="clearImportedAthletes()"><i class="fas fa-trash-alt"></i> Limpar</button>
+                    </div>
+                    <div class="imported-table-wrap">
+                        <table class="imported-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nome</th>
+                                    <th>E-mail</th>
+                                    <th>Qtd</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="importedAthletesBody">
+                                <!-- Gerado via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="importSlotsBar" style="display:none;background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:12px;display:none;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                            <span style="font-size:0.82rem;color:var(--text-secondary);">Vagas distribuídas</span>
+                            <span style="font-family:'Space Grotesk';font-weight:700;font-size:0.95rem;" id="importSlotsLabel">0 / 0</span>
+                        </div>
+                        <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
+                            <div id="importSlotsProgress" style="height:100%;background:var(--primary);border-radius:3px;transition:width 0.3s;width:0%;"></div>
+                        </div>
+                        <p style="font-size:0.72rem;color:var(--text-muted);margin-top:6px;" id="importSlotsHint"></p>
+                    </div>
+
+                    <div class="send-links-bar" id="sendLinksBar">
+                        <div class="send-info">
+                            <strong id="sendLinksCount">0</strong> links serão enviados por e-mail
+                        </div>
+                        <button class="send-links-btn" onclick="sendAthleteLinks()" id="sendLinksBtn">
+                            <i class="fas fa-paper-plane"></i> Enviar links
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gf-search">
+            <i class="fas fa-search"></i>
+            <input type="text" id="gfSearchInput" placeholder="Buscar por nome ou CPF..." oninput="filterAthleteCards()">
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+            <select class="category-select" id="gfFilterType" onchange="filterAthleteCards()" style="flex:1;min-width:140px;font-size:0.82rem;">
+                <option value="">Todos os tipos</option>
+                <option value="individual">Individual</option>
+                <option value="senior60">60+</option>
+                <option value="pending">Pendentes</option>
+            </select>
+            <select class="category-select" id="gfFilterModality" onchange="filterAthleteCards()" style="flex:1;min-width:140px;font-size:0.82rem;">
+                <option value="">Todas as modalidades</option>
+                <option value="corrida">10km Corrida</option>
+                <option value="caminhada">10km Caminhada</option>
+            </select>
         </div>
 
         <div id="athleteCardsContainer">
@@ -3172,24 +4284,15 @@
         <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:var(--radius-md);padding:20px;margin-bottom:24px;text-align:center;">
             <i class="fas fa-envelope-open-text" style="font-size:1.5rem;color:var(--primary);margin-bottom:10px;display:block;"></i>
             <h3 style="font-family:'Space Grotesk';font-size:1rem;margin-bottom:6px;">Você foi convidado!</h3>
-            <p style="font-size:0.85rem;color:var(--text-secondary);"><strong style="color:var(--text);">Carlos Eduardo Santos</strong> garantiu sua vaga na corrida. Preencha seus dados abaixo para completar a inscrição.</p>
+            <p style="font-size:0.85rem;color:var(--text-secondary);">Você faz parte do grupo</p>
+            <div style="font-family:'Space Grotesk';font-weight:700;font-size:1.25rem;color:var(--primary);margin:8px 0;padding:8px 16px;background:rgba(0,230,118,0.1);border-radius:var(--radius-sm);display:inline-block;" id="alGroupName">Nome do Grupo</div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">Preencha seus dados abaixo para completar sua inscrição na corrida.</p>
         </div>
 
-        <div class="deadline-badge" style="margin-bottom:24px;">
-            <i class="fas fa-clock"></i>
-            Preencha até: <strong>18/03/2026</strong>
-        </div>
+        <div id="alDeadlineWarning"></div>
 
-        <!-- Info do kit já escolhido -->
+        <!-- Protocolo -->
         <div style="display:flex;gap:10px;margin-bottom:28px;">
-            <div style="flex:1;background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-sm);padding:14px;text-align:center;">
-                <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Modalidade</div>
-                <div style="font-weight:600;font-size:0.9rem;" id="alModality">10km Corrida</div>
-            </div>
-            <div style="flex:1;background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-sm);padding:14px;text-align:center;">
-                <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Kit</div>
-                <div style="font-weight:600;font-size:0.9rem;" id="alKit">Premium</div>
-            </div>
             <div style="flex:1;background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-sm);padding:14px;text-align:center;">
                 <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Protocolo</div>
                 <div style="font-weight:600;font-size:0.9rem;color:var(--primary);" id="alProtocol">RK-2026-...48291</div>
@@ -3237,8 +4340,31 @@
 
         <div class="form-row">
             <div class="form-group">
+                <label>Modalidade <span class="required">*</span></label>
+                <select class="category-select" id="al-modality" onchange="onModalityChangePelotao('al-category', this.value)">
+                    <option value="">Selecione</option>
+                    <option value="corrida">10km Corrida</option>
+                    <option value="caminhada">10km Caminhada</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Pelotão <span class="required">*</span></label>
+                <select class="category-select" id="al-category">
+                    <option value="">Selecione</option>
+                    <option value="elite-b">ELITE B — Pace abaixo de 04:00 min/km</option>
+                    <option value="pelotao-a">A — de 04:01 a 04:30 min/km</option>
+                    <option value="pelotao-b">B — de 04:31 a 05:30 min/km</option>
+                    <option value="pelotao-c">C — de 05:31 a 06:30 min/km</option>
+                    <option value="pelotao-d">D — de 06:31 a 07:30 min/km</option>
+                    <option value="pelotao-e">E — acima de 07:31 min/km</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
                 <label>Equipe / Assessoria</label>
-                <input type="text" class="form-input" id="al-team" placeholder="Nome da equipe (opcional)">
+                <input type="text" class="form-input" id="al-team" placeholder="Nome da equipe (opcional)" disabled style="opacity:0.7;cursor:not-allowed;">
             </div>
             <div class="form-group">
                 <label>Tamanho da camiseta <span class="required">*</span></label>
@@ -3259,6 +4385,15 @@
             <input type="text" class="form-input" id="al-emergency" placeholder="Nome e telefone de contato">
         </div>
 
+        <!-- Container para convidados extras (exibido quando link permite mais de 1 inscrição) -->
+        <div id="alGuestsSection" style="display:none;">
+            <div style="margin:28px 0 16px;border-top:2px solid var(--primary);padding-top:20px;">
+                <div class="section-title" style="margin-bottom:4px;"><i class="fas fa-users"></i> Inscrições adicionais</div>
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:16px;">Este link permite inscrever mais atletas. Preencha os dados de cada convidado abaixo.</p>
+            </div>
+            <div id="alGuestsContainer"></div>
+        </div>
+
         <!-- Botão fake para testar rápido -->
         <div style="text-align:right;margin-bottom:20px;">
             <button class="btn-outline" onclick="fillFakeAthleteLink()" type="button" style="border-color:var(--accent);color:var(--accent);font-size:0.8rem;padding:8px 16px;">
@@ -3267,8 +4402,8 @@
         </div>
 
         <div style="text-align:center;margin-bottom:16px;">
-            <button class="btn-primary" onclick="submitAthleteLink()" style="width:100%;">
-                <i class="fas fa-check-circle"></i> Confirmar minha inscrição
+            <button class="btn-primary" onclick="submitAthleteLink()" id="alSubmitBtn" style="width:100%;">
+                <i class="fas fa-paper-plane"></i> Enviar cadastro
             </button>
         </div>
 
@@ -3282,11 +4417,20 @@
 <!-- ==================== SCREEN 9: ATHLETE LINK SUCCESS ==================== -->
 <div class="screen" id="screen-athletelinksuccess">
     <div class="success-container">
-        <div class="success-icon">
-            <i class="fas fa-check"></i>
+        <div class="success-icon" style="background:rgba(0,230,118,0.12);">
+            <i class="fas fa-paper-plane"></i>
         </div>
-        <h1 class="success-title">Inscrição completa!</h1>
-        <p class="success-subtitle">Seus dados foram registrados com sucesso</p>
+        <h1 class="success-title" id="alSuccessTitle">Dados enviados com sucesso!</h1>
+        <p class="success-subtitle" id="alSuccessSubtitle">Seus dados foram recebidos e registrados</p>
+
+        <!-- Aviso de pendência de pagamento -->
+        <div style="background:rgba(255,193,7,0.1);border:1px solid rgba(255,193,7,0.35);border-radius:var(--radius-md);padding:18px 20px;margin-bottom:24px;text-align:center;">
+            <i class="fas fa-clock" style="font-size:1.3rem;color:#FFC107;margin-bottom:8px;display:block;"></i>
+            <p style="font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:6px;">Aguardando confirmação de pagamento</p>
+            <p style="font-size:0.82rem;color:var(--text-secondary);margin:0;">
+                Após a efetivação do pagamento pelo responsável do grupo, você receberá por <strong style="color:var(--text);">e-mail a confirmação oficial da sua inscrição</strong> com todos os detalhes.
+            </p>
+        </div>
 
         <div class="protocol-card">
             <div style="display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:20px;">
@@ -3301,6 +4445,10 @@
 
             <div class="purchase-details" style="border-top:1px solid var(--surface-border);padding-top:16px;">
                 <div class="purchase-detail-row">
+                    <span class="label">Grupo</span>
+                    <span style="color:var(--primary);font-weight:700;" id="alSuccessGroup">—</span>
+                </div>
+                <div class="purchase-detail-row">
                     <span class="label">Atleta</span>
                     <span id="alSuccessName">—</span>
                 </div>
@@ -3313,8 +4461,8 @@
                     <span id="alSuccessModality">10km Corrida</span>
                 </div>
                 <div class="purchase-detail-row">
-                    <span class="label">Kit</span>
-                    <span id="alSuccessKit">Premium</span>
+                    <span class="label">Pelotão</span>
+                    <span id="alSuccessPelotao">—</span>
                 </div>
                 <div class="purchase-detail-row">
                     <span class="label">Camiseta</span>
@@ -3322,35 +4470,130 @@
                 </div>
                 <div class="purchase-detail-row">
                     <span class="label">Status</span>
-                    <span style="color:var(--primary);font-weight:600;"><i class="fas fa-check-circle"></i> Confirmado</span>
+                    <span style="color:#FFC107;font-weight:600;"><i class="fas fa-hourglass-half"></i> Aguardando pagamento</span>
                 </div>
             </div>
         </div>
 
         <div style="background:var(--surface);border:1px solid var(--surface-border);border-radius:var(--radius-md);padding:20px;margin-bottom:24px;text-align:left;">
-            <h4 style="font-size:0.9rem;margin-bottom:8px;"><i class="fas fa-info-circle" style="color:var(--primary);margin-right:6px;"></i> Próximos passos</h4>
+            <h4 style="font-size:0.9rem;margin-bottom:12px;"><i class="fas fa-info-circle" style="color:var(--primary);margin-right:6px;"></i> Próximos passos</h4>
             <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
                 <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
-                    <i class="fas fa-envelope" style="color:var(--primary);margin-top:2px;"></i>
-                    Você receberá um e-mail de confirmação com todos os detalhes
+                    <i class="fas fa-credit-card" style="color:#FFC107;margin-top:2px;"></i>
+                    O responsável do grupo realizará o pagamento de todas as inscrições
                 </li>
                 <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
-                    <i class="fas fa-box" style="color:var(--primary);margin-top:2px;"></i>
-                    Retirada do kit: 15-16 Mai no Clube Vasco da Gama
+                    <i class="fas fa-envelope" style="color:var(--primary);margin-top:2px;"></i>
+                    Após o pagamento, você receberá um e-mail com a confirmação oficial da inscrição
                 </li>
                 <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.85rem;color:var(--text-secondary);">
                     <i class="fas fa-flag-checkered" style="color:var(--primary);margin-top:2px;"></i>
                     Largada: 17 Mai às 07:00 na Av. João Pessoa
                 </li>
             </ul>
+            <div style="margin-top:14px;padding:14px;background:rgba(255,193,7,0.1);border:1px solid rgba(255,193,7,0.3);border-radius:var(--radius-sm);">
+                <p style="font-size:0.85rem;color:var(--text);margin-bottom:6px;font-weight:600;">
+                    <i class="fas fa-exclamation-triangle" style="color:#FFC107;margin-right:6px;"></i>
+                    Retirada de kit em inscrições de grupo
+                </p>
+                <p style="font-size:0.82rem;color:var(--text-secondary);margin:0;">
+                    Os kits das inscrições em grupo serão retirados pelo <strong style="color:var(--text);">responsável do grupo</strong>. No dia da retirada (15-16 Mai, Clube Vasco da Gama), procure o responsável do seu grupo para receber seu kit.
+                </p>
+            </div>
         </div>
 
         <div class="success-actions">
-            <button class="btn-primary" onclick="showToast('Confirmação enviada para seu e-mail!')">
-                <i class="fas fa-envelope"></i> Enviar confirmação por e-mail
-            </button>
             <button class="btn-secondary" onclick="goToScreen('landing')">
                 <i class="fas fa-home"></i> Ver página do evento
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== SCREEN: LOGIN ==================== -->
+<div class="screen" id="screen-login">
+    <div class="content" style="max-width:480px;padding-top:40px;">
+        <button class="btn-back" onclick="goToScreen('landing')"><i class="fas fa-arrow-left"></i> Voltar</button>
+
+        <div class="login-card" style="margin-top:24px;">
+            <div class="login-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h2 style="text-align:center;font-family:'Space Grotesk';font-size:1.3rem;margin-bottom:6px;">Acessar minhas inscrições</h2>
+            <p style="text-align:center;color:var(--text-secondary);font-size:0.88rem;margin-bottom:28px;">
+                Entre com o celular cadastrado na inscrição para consultar seus dados
+            </p>
+
+            <!-- Step 1: Phone -->
+            <div id="loginPhoneStep">
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label>Celular cadastrado <span class="required">*</span></label>
+                    <input type="tel" class="form-input" id="loginPhone" placeholder="(00) 00000-0000" maxlength="15" oninput="maskLoginPhone(this)" style="text-align:center;font-size:1.1rem;letter-spacing:1px;">
+                </div>
+                <button class="btn-primary" onclick="sendLoginCode()" style="width:100%;padding:14px;">
+                    <i class="fas fa-sms"></i> Enviar código SMS
+                </button>
+            </div>
+
+            <!-- Step 2: Code verification -->
+            <div id="loginCodeStep" style="display:none;">
+                <div style="text-align:center;margin-bottom:20px;">
+                    <div style="display:inline-flex;align-items:center;gap:8px;background:var(--secondary);padding:10px 20px;border-radius:var(--radius-sm);font-size:0.9rem;">
+                        <i class="fas fa-mobile-alt" style="color:var(--primary);"></i>
+                        <span id="loginPhoneDisplay">(13) 99876-5432</span>
+                        <button onclick="resetLoginPhone()" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:0.8rem;text-decoration:underline;">alterar</button>
+                    </div>
+                </div>
+                <p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-bottom:16px;">
+                    <i class="fas fa-lock" style="margin-right:4px;"></i> Digite o código de 6 dígitos enviado por SMS
+                </p>
+                <div class="form-group" style="margin-bottom:16px;">
+                    <input type="text" class="form-input" id="loginCode" placeholder="000000" maxlength="6" style="text-align:center;font-size:1.4rem;letter-spacing:8px;font-weight:700;" oninput="this.value=this.value.replace(/\D/g,'')">
+                </div>
+                <button class="btn-primary" onclick="verifyLoginCode()" style="width:100%;padding:14px;" id="loginVerifyBtn">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+                <p style="text-align:center;margin-top:12px;">
+                    <a href="#" onclick="sendLoginCode();return false;" style="color:var(--accent);font-size:0.82rem;">Reenviar código</a>
+                </p>
+            </div>
+        </div>
+
+        <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:20px;">
+            <i class="fas fa-info-circle" style="margin-right:4px;"></i>
+            Use o mesmo celular informado no momento da inscrição ou no cadastro do grupo.
+        </p>
+    </div>
+</div>
+
+<!-- ==================== SCREEN: MY INSCRIPTIONS ==================== -->
+<div class="screen" id="screen-myinscriptions">
+    <div class="content" style="max-width:650px;padding-top:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+            <button class="btn-back" onclick="logoutUser()" style="margin:0;"><i class="fas fa-arrow-left"></i> Sair</button>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text-secondary);">
+                <i class="fas fa-user-circle" style="color:var(--primary);font-size:1.1rem;"></i>
+                <span id="myInscPhone">(13) 99876-5432</span>
+            </div>
+        </div>
+
+        <div class="content-header" style="margin-bottom:24px;">
+            <h2>Minhas Inscrições</h2>
+            <p>Consulte o status das suas inscrições na 40ª 10K Tribuna FM</p>
+        </div>
+
+        <div id="myInscList">
+            <!-- Populated by JS -->
+        </div>
+
+        <div id="myInscEmpty" style="display:none;text-align:center;padding:40px 20px;">
+            <div style="width:64px;height:64px;margin:0 auto 16px;background:var(--surface);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-search" style="font-size:1.3rem;color:var(--text-muted);"></i>
+            </div>
+            <h3 style="font-family:'Space Grotesk';font-size:1.1rem;margin-bottom:8px;color:var(--text-secondary);">Nenhuma inscrição encontrada</h3>
+            <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:20px;">Não encontramos inscrições vinculadas a este celular.</p>
+            <button class="btn-primary" onclick="goToScreen('type')" style="padding:12px 28px;">
+                <i class="fas fa-plus"></i> Fazer uma inscrição
             </button>
         </div>
     </div>
@@ -3375,7 +4618,12 @@
 // ===== STATE =====
 let state = {
     type: null, // 'individual' or 'group'
+    groupName: '',
+    groupResponsavel: '',
+    groupPhone: '',
+    groupPhoneVerified: false,
     groupSize: 10,
+    groupKits: { individual: 0, senior60: 0 },
     modality: null,
     kit: null,
     size: null,
@@ -3384,9 +4632,18 @@ let state = {
     groupResponsible: { cpfcnpj: '', name: '', phone: '', email: '', password: '' },
 };
 
-const kitPrices = { basic: 149, premium: 199, vip: 299 };
-const kitNames = { basic: 'Kit Básico', premium: 'Kit Premium', vip: 'Kit VIP' };
+const kitPrices = { individual: 149.00, senior60: 74.50 };
+const kitNames = { individual: 'Inscrição Individual', senior60: 'Inscrição 60+' };
 const modalityNames = { corrida: '10km Corrida', caminhada: '10km Caminhada' };
+const pelotaoNames = {
+    'participativo': 'Participativo',
+    'elite-b': 'ELITE B',
+    'pelotao-a': 'Pelotão A',
+    'pelotao-b': 'Pelotão B',
+    'pelotao-c': 'Pelotão C',
+    'pelotao-d': 'Pelotão D',
+    'pelotao-e': 'Pelotão E'
+};
 
 // Simula CNPJ/CPFs já cadastrados para grupos (para travar duplicidade)
 const registeredGroupCpfCnpjs = ['12.345.678/0001-90', '111.222.333-44'];
@@ -3404,6 +4661,18 @@ function goToScreen(screen) {
     if (screen === 'kit') startTimer();
 }
 
+function updateGroupNameBanners() {
+    const isGroup = state.type === 'group' && state.groupName;
+    const bannerIds = ['gnb-kit', 'gnb-athlete', 'gnb-payment', 'gnb-success', 'gnb-groupfill'];
+    bannerIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle('visible', !!isGroup);
+        const nameEl = el.querySelector('.gnb-name');
+        if (nameEl) nameEl.textContent = state.groupName || '';
+    });
+}
+
 // ===== TYPE SELECTION =====
 function selectType(type) {
     state.type = type;
@@ -3415,9 +4684,112 @@ function selectType(type) {
     document.getElementById('btnNextType').style.display = 'inline-flex';
 }
 
+function maskPhone(el) {
+    let v = el.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    else if (v.length > 0) v = '(' + v;
+    el.value = v;
+
+    // Show SMS section when phone has 11 digits
+    const digits = el.value.replace(/\D/g, '');
+    const smsSection = document.getElementById('smsVerifySection');
+    if (digits.length === 11) {
+        smsSection.style.display = 'block';
+        // Reset verification if phone changed
+        if (state.groupPhone !== digits) {
+            state.groupPhoneVerified = false;
+            document.getElementById('smsSendArea').style.display = 'block';
+            document.getElementById('smsCodeArea').style.display = 'none';
+            document.getElementById('smsVerifiedBadge').style.display = 'none';
+        }
+        state.groupPhone = digits;
+    } else {
+        smsSection.style.display = 'none';
+        state.groupPhoneVerified = false;
+    }
+}
+
+function sendSmsCode() {
+    const phone = document.getElementById('groupPhone').value;
+    if (phone.replace(/\D/g, '').length < 11) {
+        showToast('Preencha o celular completo');
+        return;
+    }
+    document.getElementById('smsSendArea').style.display = 'none';
+    document.getElementById('smsCodeArea').style.display = 'block';
+    document.getElementById('smsVerifiedBadge').style.display = 'none';
+    document.getElementById('smsCodeInput').value = '';
+    document.getElementById('smsCodeInput').focus();
+    showToast('Código SMS enviado para ' + phone);
+}
+
+function verifySmsCode() {
+    const code = document.getElementById('smsCodeInput').value.trim();
+    if (code === '123456') {
+        state.groupPhoneVerified = true;
+        document.getElementById('smsCodeArea').style.display = 'none';
+        document.getElementById('smsVerifiedBadge').style.display = 'block';
+        showToast('Celular verificado com sucesso!');
+    } else {
+        showToast('Código incorreto. Tente novamente.');
+        document.getElementById('smsCodeInput').value = '';
+        document.getElementById('smsCodeInput').focus();
+    }
+}
+
+function advanceFromType() {
+    if (state.type === 'group') {
+        // Validate group fields
+        const groupName = document.getElementById('groupName').value.trim();
+        if (!groupName) {
+            showToast('Preencha o nome do grupo');
+            document.getElementById('groupName').focus();
+            return;
+        }
+        const responsavel = document.getElementById('groupResponsavel').value.trim();
+        if (!responsavel) {
+            showToast('Preencha o nome do responsável');
+            document.getElementById('groupResponsavel').focus();
+            return;
+        }
+        const phone = document.getElementById('groupPhone').value.replace(/\D/g, '');
+        if (phone.length < 11) {
+            showToast('Preencha o celular do responsável');
+            document.getElementById('groupPhone').focus();
+            return;
+        }
+        if (!state.groupPhoneVerified) {
+            showToast('Verifique o celular via SMS antes de continuar');
+            return;
+        }
+
+        state.groupName = groupName;
+        state.groupResponsavel = responsavel;
+        state.groupPhone = phone;
+        state.groupKits = { individual: state.groupSize, senior60: 0 };
+        goToScreen('athlete');
+    } else {
+        goToScreen('kit');
+    }
+}
+
+function advanceToPayment() {
+    if (state.type !== 'group') {
+        const catVal = document.getElementById('categorySelect')?.value;
+        if (!catVal) {
+            showToast('Selecione o pelotão antes de continuar');
+            document.getElementById('categorySelect')?.focus();
+            return;
+        }
+    }
+    goToScreen('payment');
+}
+
 function changeGroupSize(delta) {
     state.groupSize = Math.max(10, state.groupSize + delta);
-    document.getElementById('groupSize').textContent = state.groupSize;
+    document.getElementById('groupSize').value = state.groupSize;
     document.getElementById('btnMinus').disabled = state.groupSize <= 10;
 }
 
@@ -3492,10 +4864,56 @@ function togglePasswordVisibility() {
 }
 
 // ===== MODALITY =====
+function getPelotaoOptionsHtml(selectedValue, modality) {
+    if (modality === 'caminhada') {
+        return '<option value="participativo" selected>Participativo</option>';
+    }
+    const opts = [
+        { value: '', label: 'Selecione seu pelotão' },
+        { value: 'elite-b', label: 'ELITE B — Pace abaixo de 04:00 min/km' },
+        { value: 'pelotao-a', label: 'A — de 04:01 a 04:30 min/km' },
+        { value: 'pelotao-b', label: 'B — de 04:31 a 05:30 min/km' },
+        { value: 'pelotao-c', label: 'C — de 05:31 a 06:30 min/km' },
+        { value: 'pelotao-d', label: 'D — de 06:31 a 07:30 min/km' },
+        { value: 'pelotao-e', label: 'E — acima de 07:31 min/km' },
+    ];
+    return opts.map(o => '<option value="' + o.value + '"' + (o.value === selectedValue ? ' selected' : '') + '>' + o.label + '</option>').join('');
+}
+
+function applyModalityToPelotao(selectEl, modality) {
+    const current = selectEl.value;
+    if (modality === 'caminhada') {
+        selectEl.innerHTML = '<option value="participativo" selected>Participativo</option>';
+        selectEl.value = 'participativo';
+        selectEl.disabled = true;
+    } else {
+        selectEl.disabled = false;
+        // If currently participativo or empty, rebuild with corrida options
+        if (current === 'participativo' || !current) {
+            selectEl.innerHTML = getPelotaoOptionsHtml('', 'corrida');
+        }
+    }
+}
+
+function onModalityChangePelotao(pelotaoId, modality) {
+    const sel = document.getElementById(pelotaoId);
+    if (sel) applyModalityToPelotao(sel, modality);
+}
+
 function selectModality(mod) {
     state.modality = mod;
     document.querySelectorAll('.modality-card').forEach(c => c.classList.remove('selected'));
     document.getElementById('mod-' + mod).classList.add('selected');
+
+    // Update pelotão for all individual athletes
+    state.individualAthletes.forEach((a, idx) => {
+        if (mod === 'caminhada') {
+            a.pelotao = 'participativo';
+        } else if (a.pelotao === 'participativo') {
+            a.pelotao = '';
+        }
+    });
+    renderIndividualAthletes();
     updateKitBar();
 }
 
@@ -3508,6 +4926,11 @@ function selectKit(kit) {
 }
 
 function updateKitBar() {
+    if (state.type !== 'group') {
+        // Individual: delegate to multi-athlete bar
+        updateIndividualKitBar();
+        return;
+    }
     const label = document.getElementById('kitSummaryLabel');
     const price = document.getElementById('kitSummaryPrice');
 
@@ -3534,6 +4957,433 @@ function selectSize(btn, size) {
     btn.classList.add('selected');
 }
 
+// ===== INDIVIDUAL MULTI-ATHLETE =====
+function initIndividualAthletes() {
+    if (state.individualAthletes.length === 0) {
+        state.individualAthletes = [createBlankAthlete()];
+    }
+    renderIndividualAthletes();
+}
+
+function createBlankAthlete() {
+    return { name: '', cpf: '', birth: '', gender: '', email: '', phone: '', pelotao: '', size: '', team: '', kit: 'individual', modality: '' };
+}
+
+function addIndividualAthlete() {
+    state.individualAthletes.push(createBlankAthlete());
+    renderIndividualAthletes();
+    // Expand the new one
+    const idx = state.individualAthletes.length - 1;
+    setTimeout(() => toggleIndAthleteCard(idx), 50);
+}
+
+function removeIndividualAthlete(idx) {
+    if (state.individualAthletes.length <= 1) return;
+    state.individualAthletes.splice(idx, 1);
+    renderIndividualAthletes();
+    updateIndividualKitBar();
+}
+
+function toggleIndAthleteCard(idx) {
+    const cards = document.querySelectorAll('.ind-athlete-card');
+    cards.forEach((c, i) => {
+        if (i === idx) c.classList.toggle('expanded');
+        else c.classList.remove('expanded');
+    });
+}
+
+function calcKitByAge(birthStr) {
+    if (!birthStr) return 'individual';
+    const birth = new Date(birthStr);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age >= 60 ? 'senior60' : 'individual';
+}
+
+function onIndAthleteFieldChange(idx) {
+    // Sync form values to state
+    const card = document.getElementById('ind-athlete-' + idx);
+    if (!card) return;
+    const a = state.individualAthletes[idx];
+    a.name = card.querySelector('[data-field="name"]')?.value.trim() || '';
+    a.cpf = card.querySelector('[data-field="cpf"]')?.value.trim() || '';
+    a.birth = card.querySelector('[data-field="birth"]')?.value || '';
+    a.email = card.querySelector('[data-field="email"]')?.value.trim() || '';
+    a.phone = card.querySelector('[data-field="phone"]')?.value.trim() || '';
+    a.team = card.querySelector('[data-field="team"]')?.value.trim() || '';
+    const pelSel = card.querySelector('[data-field="pelotao"]');
+    a.pelotao = pelSel ? pelSel.value : '';
+    const modSel = card.querySelector('[data-field="modality"]');
+    a.modality = modSel ? modSel.value : '';
+
+    // Auto-calc kit by age
+    a.kit = calcKitByAge(a.birth);
+
+    // Update badge(s)
+    card.querySelectorAll('.ind-athlete-kit-badge').forEach(badge => {
+        if (a.kit === 'senior60') {
+            badge.className = 'ind-athlete-kit-badge senior60';
+            badge.textContent = '60+ R$ 74,50';
+        } else {
+            badge.className = 'ind-athlete-kit-badge individual';
+            badge.textContent = 'Individual R$ 149,00';
+        }
+    });
+
+    // Update header title
+    const titleEl = card.querySelector('.ind-athlete-card-title');
+    if (titleEl) {
+        titleEl.textContent = a.name || ('Atleta ' + (idx + 1));
+    }
+
+    // Sync global modality from first athlete
+    state.modality = state.individualAthletes[0]?.modality || null;
+
+    updateIndividualKitBar();
+}
+
+function selectIndGender(idx, btn) {
+    const card = document.getElementById('ind-athlete-' + idx);
+    card.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    state.individualAthletes[idx].gender = btn.textContent.trim();
+    onIndAthleteFieldChange(idx);
+}
+
+function selectIndSize(idx, btn, size) {
+    const card = document.getElementById('ind-athlete-' + idx);
+    card.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    state.individualAthletes[idx].size = size;
+}
+
+function onIndSizeChange(idx, size) {
+    state.individualAthletes[idx].size = size;
+}
+
+function onIndModalityChange(idx, modality) {
+    const a = state.individualAthletes[idx];
+    a.modality = modality;
+    // Update pelotão based on modality
+    if (modality === 'caminhada') {
+        a.pelotao = 'participativo';
+    } else if (a.pelotao === 'participativo') {
+        a.pelotao = '';
+    }
+    // Also sync global state.modality from first athlete (for payment summary compat)
+    state.modality = state.individualAthletes[0]?.modality || null;
+    // Re-render just the pelotão select of this card
+    const card = document.getElementById('ind-athlete-' + idx);
+    if (card) {
+        const pelSel = card.querySelector('[data-field="pelotao"]');
+        if (pelSel) {
+            applyModalityToPelotao(pelSel, modality);
+        }
+    }
+    updateIndividualKitBar();
+}
+
+function maskIndPhone(el, idx) {
+    let v = el.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    else if (v.length > 0) v = '(' + v;
+    el.value = v;
+    onIndAthleteFieldChange(idx);
+}
+
+function maskIndCpf(el, idx) {
+    let v = el.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 9) v = v.slice(0,3) + '.' + v.slice(3,6) + '.' + v.slice(6,9) + '-' + v.slice(9);
+    else if (v.length > 6) v = v.slice(0,3) + '.' + v.slice(3,6) + '.' + v.slice(6);
+    else if (v.length > 3) v = v.slice(0,3) + '.' + v.slice(3);
+    el.value = v;
+    onIndAthleteFieldChange(idx);
+}
+
+function renderIndividualAthletes() {
+    const container = document.getElementById('indAthletesContainer');
+    if (!container) return;
+
+    container.innerHTML = state.individualAthletes.map((a, idx) => {
+        const kitType = a.kit || 'individual';
+        const badgeClass = kitType === 'senior60' ? 'senior60' : 'individual';
+        const badgeText = kitType === 'senior60' ? '60+ R$ 74,50' : 'Individual R$ 149,00';
+        const displayName = a.name || ('Atleta ' + (idx + 1));
+        const isMulti = state.individualAthletes.length > 1;
+        const isCaminhada = a.modality === 'caminhada';
+
+        return `
+        <div class="ind-athlete-card expanded" id="ind-athlete-${idx}">
+            ${isMulti ? `
+            <div class="ind-athlete-card-header" onclick="toggleIndAthleteCard(${idx})">
+                <div class="ind-athlete-card-left">
+                    <div class="ind-athlete-card-num">${idx + 1}</div>
+                    <span class="ind-athlete-card-title">${escapeHtml(displayName)}</span>
+                </div>
+                <span class="ind-athlete-kit-badge ${badgeClass}">${badgeText}</span>
+                <div class="ind-athlete-card-actions">
+                    ${idx > 0 ? '<button class="ind-athlete-remove-btn" onclick="event.stopPropagation();removeIndividualAthlete(' + idx + ')" title="Remover"><i class="fas fa-trash-alt"></i></button>' : ''}
+                    <i class="fas fa-chevron-down ind-athlete-toggle"></i>
+                </div>
+            </div>` : ''}
+            <div class="ind-athlete-card-body" ${!isMulti ? 'style="padding-top:20px;"' : ''}>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome completo <span class="required">*</span></label>
+                        <input type="text" class="form-input" data-field="name" placeholder="Nome completo" value="${escapeHtml(a.name)}" oninput="onIndAthleteFieldChange(${idx})">
+                    </div>
+                    <div class="form-group">
+                        <label>CPF <span class="required">*</span></label>
+                        <input type="text" class="form-input" data-field="cpf" placeholder="000.000.000-00" value="${escapeHtml(a.cpf)}" oninput="maskIndCpf(this, ${idx})">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de nascimento <span class="required">*</span></label>
+                        <input type="date" class="form-input" data-field="birth" value="${a.birth}" onchange="onIndAthleteFieldChange(${idx})">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo <span class="required">*</span></label>
+                        <div class="gender-options">
+                            <button type="button" class="gender-btn ${a.gender === 'Masculino' ? 'selected' : ''}" onclick="selectIndGender(${idx}, this)">Masculino</button>
+                            <button type="button" class="gender-btn ${a.gender === 'Feminino' ? 'selected' : ''}" onclick="selectIndGender(${idx}, this)">Feminino</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>E-mail <span class="required">*</span></label>
+                        <input type="email" class="form-input" data-field="email" placeholder="email@exemplo.com" value="${escapeHtml(a.email)}" oninput="onIndAthleteFieldChange(${idx})">
+                    </div>
+                    <div class="form-group">
+                        <label>Celular <span class="required">*</span></label>
+                        <input type="tel" class="form-input" data-field="phone" placeholder="(00) 00000-0000" value="${escapeHtml(a.phone)}" oninput="maskIndPhone(this, ${idx})">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Modalidade <span class="required">*</span></label>
+                        <select class="category-select" data-field="modality" onchange="onIndModalityChange(${idx}, this.value)">
+                            <option value="">Selecione</option>
+                            <option value="corrida" ${a.modality === 'corrida' ? 'selected' : ''}>10km Corrida</option>
+                            <option value="caminhada" ${a.modality === 'caminhada' ? 'selected' : ''}>10km Caminhada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Pelotão <span class="required">*</span></label>
+                        <select class="category-select" data-field="pelotao" onchange="onIndAthleteFieldChange(${idx})" ${isCaminhada ? 'disabled' : ''}>
+                            ${getPelotaoOptionsHtml(a.pelotao, a.modality)}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Equipe / Assessoria</label>
+                        <input type="text" class="form-input" data-field="team" placeholder="Nome da equipe (opcional)" value="${escapeHtml(a.team)}" oninput="onIndAthleteFieldChange(${idx})">
+                    </div>
+                    <div class="form-group">
+                        <label>Tamanho da camiseta <span class="required">*</span></label>
+                        <select class="category-select" data-field="size" onchange="onIndSizeChange(${idx}, this.value)">
+                            <option value="">Selecione</option>
+                            <option value="PP" ${a.size === 'PP' ? 'selected' : ''}>PP</option>
+                            <option value="P" ${a.size === 'P' ? 'selected' : ''}>P</option>
+                            <option value="M" ${a.size === 'M' ? 'selected' : ''}>M</option>
+                            <option value="G" ${a.size === 'G' ? 'selected' : ''}>G</option>
+                            <option value="GG" ${a.size === 'GG' ? 'selected' : ''}>GG</option>
+                            <option value="XG" ${a.size === 'XG' ? 'selected' : ''}>XG</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top:8px;padding:10px 14px;background:var(--secondary);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:space-between;">
+                    <span style="font-size:0.82rem;color:var(--text-secondary);"><i class="fas fa-tag" style="color:var(--primary);margin-right:6px;"></i>Tipo de inscrição</span>
+                    <span class="ind-athlete-kit-badge ${badgeClass}" style="font-size:0.78rem;">${badgeText}</span>
+                </div>
+                <div style="margin-top:12px;text-align:right;">
+                    <button class="btn-outline" onclick="fillFakeIndAthlete(${idx})" type="button" style="border-color:var(--accent);color:var(--accent);font-size:0.82rem;padding:10px 16px;">
+                        <i class="fas fa-magic"></i> Preencher com dados fake
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+
+    updateIndividualKitBar();
+}
+
+function updateIndividualKitBar() {
+    if (state.type === 'group') return;
+    const label = document.getElementById('kitSummaryLabel');
+    const price = document.getElementById('kitSummaryPrice');
+    if (!label || !price) return;
+
+    const athletes = state.individualAthletes;
+    if (athletes.length === 0) {
+        label.textContent = 'Preencha os dados do atleta';
+        price.textContent = '';
+        return;
+    }
+
+    const total = athletes.reduce((sum, a) => sum + (kitPrices[a.kit] || kitPrices.individual), 0);
+    const indCount = athletes.filter(a => a.kit !== 'senior60').length;
+    const senCount = athletes.filter(a => a.kit === 'senior60').length;
+
+    const parts = [];
+    if (indCount > 0) parts.push(indCount + 'x Individual');
+    if (senCount > 0) parts.push(senCount + 'x 60+');
+
+    label.textContent = athletes.length + ' atleta' + (athletes.length > 1 ? 's' : '') + ' — ' + parts.join(' + ');
+    price.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+}
+
+function fillFakeIndAthlete(idx) {
+    const a = state.individualAthletes[idx];
+    if (!a) return;
+    const name = fakeNames[idx % fakeNames.length];
+    const sizes = ['PP', 'P', 'M', 'G', 'GG', 'XG'];
+    const isSeniorFake = Math.random() < 0.3;
+    const year = isSeniorFake ? (1940 + Math.floor(Math.random() * 26)) : (1980 + Math.floor(Math.random() * 20));
+    const month = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0');
+    const day = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0');
+    const fakeMod = Math.random() > 0.3 ? 'corrida' : 'caminhada';
+
+    a.name = name;
+    a.cpf = fakeCPFs[idx % fakeCPFs.length];
+    a.birth = year + '-' + month + '-' + day;
+    a.gender = Math.random() > 0.5 ? 'Masculino' : 'Feminino';
+    a.email = fakeEmails(name);
+    a.phone = fakePhones();
+    a.modality = fakeMod;
+    a.pelotao = fakeMod === 'caminhada' ? 'participativo' : ['elite-b','pelotao-a','pelotao-b','pelotao-c','pelotao-d','pelotao-e'][Math.floor(Math.random() * 6)];
+    a.size = sizes[Math.floor(Math.random() * sizes.length)];
+    a.team = '';
+
+    // Recalculate kit by age
+    const age = getAthleteAge(a.birth);
+    a.kit = age >= 60 ? 'senior60' : 'individual';
+
+    state.modality = state.individualAthletes[0]?.modality || null;
+    renderIndividualAthletes();
+    showToast('Dados fake preenchidos para Atleta ' + (idx + 1));
+}
+
+// ===== KIT SCREEN VALIDATION =====
+function advanceFromKit() {
+    if (state.type === 'group') {
+        const totalQty = getGroupKitTotal();
+        if (totalQty < state.groupSize) {
+            showToast('Selecione todos os ' + state.groupSize + ' kits antes de continuar');
+            return;
+        }
+        goToScreen('athlete');
+    } else {
+        // Individual flow: validate all athletes
+        for (let i = 0; i < state.individualAthletes.length; i++) {
+            const a = state.individualAthletes[i];
+            const label = state.individualAthletes.length > 1 ? ' do Atleta ' + (i+1) : '';
+            if (!a.name) { showToast('Preencha o nome' + label); expandAndFocus(i, 'name'); return; }
+            if (!a.cpf || a.cpf.replace(/\D/g,'').length < 11) { showToast('Preencha o CPF' + label); expandAndFocus(i, 'cpf'); return; }
+            if (!a.birth) { showToast('Preencha a data de nascimento' + label); expandAndFocus(i, 'birth'); return; }
+            if (!a.gender) { showToast('Selecione o sexo' + label); toggleIndAthleteCard(i); return; }
+            if (!a.email) { showToast('Preencha o e-mail' + label); expandAndFocus(i, 'email'); return; }
+            if (!a.phone || a.phone.replace(/\D/g,'').length < 10) { showToast('Preencha o celular' + label); expandAndFocus(i, 'phone'); return; }
+            if (!a.modality) { showToast('Selecione a modalidade' + label); expandAndFocus(i, 'modality'); return; }
+            if (!a.pelotao) { showToast('Selecione o pelotão' + label); expandAndFocus(i, 'pelotao'); return; }
+            if (!a.size) { showToast('Selecione o tamanho da camiseta' + label); expandAndFocus(i, 'size'); return; }
+        }
+        // Set kit/modality from first athlete for backward compat
+        state.kit = state.individualAthletes[0].kit;
+        state.modality = state.individualAthletes[0].modality;
+        goToScreen('payment');
+    }
+}
+
+function expandAndFocus(idx, field) {
+    // Expand the card and focus the field
+    const cards = document.querySelectorAll('.ind-athlete-card');
+    cards.forEach((c, i) => {
+        if (i === idx) c.classList.add('expanded');
+        else c.classList.remove('expanded');
+    });
+    setTimeout(() => {
+        const card = document.getElementById('ind-athlete-' + idx);
+        if (card) {
+            const input = card.querySelector('[data-field="' + field + '"]');
+            if (input) input.focus();
+        }
+    }, 100);
+}
+
+// ===== GROUP KIT QUANTITY =====
+function changeGroupKit(type, delta) {
+    const current = state.groupKits[type] || 0;
+    const newVal = Math.max(0, current + delta);
+    const otherTotal = Object.entries(state.groupKits)
+        .filter(([k]) => k !== type)
+        .reduce((sum, [, v]) => sum + v, 0);
+    if (newVal + otherTotal > state.groupSize) return;
+    state.groupKits[type] = newVal;
+    updateGroupKitUI();
+}
+
+function onGroupKitInput(type, el) {
+    let val = parseInt(el.value, 10);
+    if (isNaN(val) || val < 0) val = 0;
+    const otherTotal = Object.entries(state.groupKits)
+        .filter(([k]) => k !== type)
+        .reduce((sum, [, v]) => sum + v, 0);
+    if (val + otherTotal > state.groupSize) {
+        val = Math.max(0, state.groupSize - otherTotal);
+    }
+    state.groupKits[type] = val;
+    el.value = val;
+    updateGroupKitUI();
+}
+
+function updateGroupKitUI() {
+    // Update counters
+    ['individual', 'senior60'].forEach(type => {
+        document.getElementById('groupKit-' + type).value = state.groupKits[type];
+        const card = document.getElementById('gk-card-' + type);
+        card.classList.toggle('has-qty', state.groupKits[type] > 0);
+    });
+
+    const totalQty = Object.values(state.groupKits).reduce((s, v) => s + v, 0);
+    const totalPrice = Object.entries(state.groupKits).reduce((sum, [type, qty]) => sum + qty * kitPrices[type], 0);
+    const isComplete = totalQty === state.groupSize;
+
+    // Progress indicator
+    const countEl = document.getElementById('groupKitCount');
+    countEl.textContent = totalQty + ' / ' + state.groupSize;
+    countEl.className = 'gkp-count ' + (isComplete ? 'complete' : 'incomplete');
+
+    // Bottom bar
+    const label = document.getElementById('kitSummaryLabel');
+    const price = document.getElementById('kitSummaryPrice');
+    if (isComplete) {
+        const parts = Object.entries(state.groupKits)
+            .filter(([, qty]) => qty > 0)
+            .map(([type, qty]) => qty + 'x ' + kitNames[type]);
+        label.textContent = parts.join(' + ');
+        price.textContent = 'R$ ' + totalPrice.toFixed(2).replace('.', ',');
+    } else {
+        label.textContent = totalQty + ' / ' + state.groupSize + ' kits selecionados';
+        price.textContent = '';
+    }
+}
+
+function getGroupKitTotal() {
+    return Object.values(state.groupKits).reduce((s, v) => s + v, 0);
+}
+
+function getGroupKitPrice() {
+    return Object.entries(state.groupKits).reduce((sum, [type, qty]) => sum + qty * kitPrices[type], 0);
+}
+
 // ===== GENDER =====
 function selectGender(btn) {
     const parent = btn.closest('.gender-options');
@@ -3546,7 +5396,40 @@ function updateAthleteScreen() {
     const isGroup = state.type === 'group';
     document.getElementById('individualForm').style.display = isGroup ? 'none' : 'block';
     document.getElementById('groupNotice').style.display = isGroup ? 'block' : 'none';
-    document.getElementById('groupCountText').textContent = state.groupSize + ' vagas';
+
+    // Back button: groups go to type screen (skip kit), individuals go to kit
+    const backBtn = document.getElementById('athleteBackBtn');
+    if (backBtn) {
+        backBtn.setAttribute('onclick', isGroup ? "goToScreen('type')" : "goToScreen('kit')");
+    }
+
+    // Hide urgency timer for groups (no immediate payment)
+    const urgencyBar = document.getElementById('athleteUrgencyBar');
+    if (urgencyBar) urgencyBar.style.display = isGroup ? 'none' : 'flex';
+
+    // Update stepper for groups (3 steps: Tipo -> Reserva -> Faturamento) vs individuals (4 steps)
+    const stepperEl = document.getElementById('athleteStepper');
+    if (isGroup) {
+        stepperEl.innerHTML = `
+            <div class="stepper">
+                <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div><span class="step-label">Tipo</span></div>
+                <div class="step-line active"></div>
+                <div class="step active"><div class="step-circle">2</div><span class="step-label">Reserva</span></div>
+                <div class="step-line"></div>
+                <div class="step"><div class="step-circle">3</div><span class="step-label">Faturamento</span></div>
+            </div>`;
+    } else {
+        stepperEl.innerHTML = `
+            <div class="stepper">
+                <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div></div>
+                <div class="step-line active"></div>
+                <div class="step completed"><div class="step-circle"><i class="fas fa-check" style="font-size:0.7rem"></i></div></div>
+                <div class="step-line active"></div>
+                <div class="step active"><div class="step-circle">3</div><span class="step-label">Atleta</span></div>
+                <div class="step-line"></div>
+                <div class="step"><div class="step-circle">4</div><span class="step-label">Pagamento</span></div>
+            </div>`;
+    }
 
     // Botão: grupo vai para groupfill, individual vai para pagamento
     const btnNext = document.getElementById('btnAthleteNext');
@@ -3565,6 +5448,63 @@ function updateAthleteScreen() {
         btnNext.innerHTML = 'Ir para pagamento <i class="fas fa-arrow-right"></i>';
         btnNext.onclick = function() { goToScreen('payment'); };
     }
+}
+
+function updateGroupReview() {
+    // Nome do grupo
+    const nameSection = document.getElementById('groupReviewName');
+    if (state.groupName) {
+        nameSection.style.display = 'block';
+        document.getElementById('groupReviewNameText').textContent = state.groupName;
+    } else {
+        nameSection.style.display = 'none';
+    }
+
+    // Total de atletas
+    document.getElementById('groupReviewTotal').textContent = state.groupSize;
+
+    // Prévia: todas as inscrições como individual (R$ 149,00)
+    const pricesEl = document.getElementById('groupReviewPrices');
+    const unitPrice = kitPrices.individual; // 149.00
+    const subtotal = state.groupSize * unitPrice;
+
+    let pricesHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="color:var(--text-secondary);font-size:0.9rem;">
+                <i class="fas fa-tag" style="width:20px;color:var(--text-muted);margin-right:6px;"></i>
+                ${state.groupSize}x Inscrição Individual <span style="color:var(--text-muted);font-size:0.8rem;">(R$ ${unitPrice.toFixed(2).replace('.',',')} cada)</span>
+            </span>
+            <span style="font-family:'Space Grotesk';font-weight:600;font-size:0.95rem;">R$ ${subtotal.toFixed(2).replace('.',',')}</span>
+        </div>
+        <div style="font-size:0.78rem;color:var(--text-muted);font-style:italic;margin-top:4px;">
+            <i class="fas fa-info-circle" style="margin-right:4px;"></i>
+            Atletas com 60+ anos terão desconto de 50% aplicado automaticamente no valor final.
+        </div>`;
+    pricesEl.innerHTML = pricesHTML;
+
+    // Taxa e total (estimado)
+    const fee = subtotal * 0.08;
+    const grandTotal = subtotal + fee;
+    document.getElementById('groupReviewFee').textContent = 'R$ ' + fee.toFixed(2).replace('.', ',');
+    document.getElementById('groupReviewGrandTotal').textContent = 'R$ ' + grandTotal.toFixed(2).replace('.', ',');
+}
+
+function confirmGroupRegistration() {
+    const loading = document.getElementById('loading');
+    document.getElementById('loadingText').textContent = 'Registrando reserva do grupo...';
+    loading.classList.add('visible');
+
+    setTimeout(() => {
+        document.getElementById('loadingText').textContent = 'Gerando links de inscrição...';
+    }, 800);
+
+    setTimeout(() => {
+        loading.classList.remove('visible');
+        stopTimer();
+        updateSuccessScreen();
+        storeCurrentInscription();
+        goToScreen('success');
+    }, 1500);
 }
 
 // ===== BUYER =====
@@ -3681,6 +5621,74 @@ function updatePaymentScreen() {
         const payerCard = document.getElementById('groupPayerCard');
         if (payerCard) payerCard.style.display = 'none';
     }
+
+    // Pre-fill buyer from first athlete for individual
+    if (state.sameBuyer && state.type !== 'group' && state.individualAthletes.length > 0) {
+        const a = state.individualAthletes[0];
+        document.getElementById('buyerName').value = a.name;
+        document.getElementById('buyerCpf').value = a.cpf;
+        document.getElementById('buyerEmail').value = a.email;
+        document.getElementById('buyerPhone').value = a.phone;
+    }
+}
+
+// ===== NOTA FISCAL =====
+let nfSameBuyer = false;
+let nfType = 'pf'; // 'pf' or 'pj'
+
+function toggleNfSameBuyer() {
+    nfSameBuyer = !nfSameBuyer;
+    document.getElementById('nfSameBuyerCheck').classList.toggle('checked', nfSameBuyer);
+    document.getElementById('nfForm').style.display = nfSameBuyer ? 'none' : 'block';
+
+    if (nfSameBuyer) {
+        // Copy buyer data to NF PF fields
+        document.getElementById('nfPfName').value = document.getElementById('buyerName').value;
+        document.getElementById('nfPfCpf').value = document.getElementById('buyerCpf').value;
+        document.getElementById('nfPfEmail').value = document.getElementById('buyerEmail').value;
+        // Reset to PF mode
+        selectNfType('pf');
+    }
+}
+
+function selectNfType(type) {
+    nfType = type;
+    document.getElementById('nfTypePF').classList.toggle('selected', type === 'pf');
+    document.getElementById('nfTypePJ').classList.toggle('selected', type === 'pj');
+    document.getElementById('nfPfFields').style.display = type === 'pf' ? 'block' : 'none';
+    document.getElementById('nfPjFields').style.display = type === 'pj' ? 'block' : 'none';
+}
+
+function fetchCnpjData() {
+    const raw = document.getElementById('nfPjCnpj').value.replace(/\D/g, '');
+    if (raw.length !== 14) return;
+
+    const cnpjInput = document.getElementById('nfPjCnpj');
+    cnpjInput.style.opacity = '0.5';
+    showToast('Consultando CNPJ na Receita Federal...');
+
+    fetch('https://brasilapi.com.br/api/cnpj/v1/' + raw)
+        .then(r => { if (!r.ok) throw new Error('CNPJ não encontrado'); return r.json(); })
+        .then(data => {
+            cnpjInput.style.opacity = '1';
+            document.getElementById('nfPjRazao').value = data.razao_social || '';
+            if (data.email) document.getElementById('nfPjEmail').value = data.email;
+            document.getElementById('nfCep').value = data.cep ? data.cep.replace(/(\d{5})(\d{3})/, '$1-$2') : '';
+            document.getElementById('nfEndereco').value = [data.descricao_tipo_de_logradouro, data.logradouro].filter(Boolean).join(' ') || '';
+            document.getElementById('nfNumero').value = data.numero || '';
+            document.getElementById('nfComplemento').value = data.complemento || '';
+            document.getElementById('nfBairro').value = data.bairro || '';
+            document.getElementById('nfCidade').value = data.municipio || '';
+            document.getElementById('nfUf').value = data.uf || '';
+            if (data.descricao_situacao_cadastral) {
+                document.getElementById('nfPjIe').value = '';
+            }
+            showToast('Dados do CNPJ preenchidos automaticamente!');
+        })
+        .catch(err => {
+            cnpjInput.style.opacity = '1';
+            showToast('CNPJ não encontrado. Preencha manualmente.');
+        });
 }
 
 // ===== PAYMENT SELECTION =====
@@ -3701,6 +5709,9 @@ function copyPix() {
 
 // ===== PROCESS PAYMENT =====
 function processPayment() {
+    stopTimer();
+
+    const isGroupFinalized = state.type === 'group' && groupFinalized;
     const loading = document.getElementById('loading');
     const loadingText = document.getElementById('loadingText');
 
@@ -3716,11 +5727,93 @@ function processPayment() {
         loadingText.textContent = 'Gerando protocolo...';
     }, 2200);
 
-    setTimeout(() => {
-        loading.classList.remove('visible');
-        updateSuccessScreen();
-        goToScreen('success');
-    }, 3000);
+    if (isGroupFinalized) {
+        // For finalized groups: after payment, send confirmation emails
+        setTimeout(() => {
+            loadingText.textContent = 'Enviando confirmações por e-mail...';
+        }, 3000);
+
+        const athletes = Object.values(groupAthletes).filter(a => a.filled);
+        let emailsSent = 0;
+        const totalEmails = athletes.length;
+
+        setTimeout(() => {
+            const emailInterval = setInterval(() => {
+                emailsSent++;
+                loadingText.textContent = 'Enviando e-mail ' + emailsSent + ' de ' + totalEmails + '...';
+                if (emailsSent >= totalEmails) {
+                    clearInterval(emailInterval);
+                    setTimeout(() => {
+                        loading.classList.remove('visible');
+                        updateSuccessScreen();
+                        storeCurrentInscription();
+                        goToScreen('success');
+                        showToast('Confirmação enviada para ' + totalEmails + ' atleta(s)!');
+                    }, 500);
+                }
+            }, 300);
+        }, 3500);
+    } else {
+        setTimeout(() => {
+            loading.classList.remove('visible');
+            updateSuccessScreen();
+            storeCurrentInscription();
+            goToScreen('success');
+        }, 3000);
+    }
+}
+
+function generateQrSvg(data) {
+    var qr = qrcode(0, 'M');
+    qr.addData(data);
+    qr.make();
+    return qr.createSvgTag({ cellSize: 4, margin: 2 });
+}
+
+function renderKitPickupQr(proto) {
+    const section = document.getElementById('kitPickupSection');
+    const container = document.getElementById('kitQrCards');
+    const isGroup = state.type === 'group';
+    const isGroupFinal = isGroup && groupFinalized;
+
+    // Group pending (reservation without payment) — hide
+    if (isGroup && !isGroupFinal) {
+        section.style.display = 'none';
+        return;
+    }
+
+    container.innerHTML = '';
+
+    if (isGroupFinal) {
+        // 1 unique QR for the entire group
+        const qrData = 'KIT-GRP-' + proto;
+        const athleteCount = Object.values(groupAthletes).filter(a => a.filled).length;
+        const card = document.createElement('div');
+        card.className = 'kit-qr-card';
+        card.innerHTML =
+            '<div class="kit-qr-image">' + generateQrSvg(qrData) + '</div>' +
+            '<div class="kit-qr-label">' + qrData + '</div>' +
+            '<div class="kit-qr-name">' + escapeHtml(state.groupName || 'Grupo') + '</div>' +
+            '<div class="kit-qr-info">' + athleteCount + ' atletas &bull; Responsável: ' + escapeHtml(state.individualAthletes[0]?.name || state.groupName || '—') + '</div>';
+        container.appendChild(card);
+    } else {
+        // Individual — 1 QR per athlete
+        state.individualAthletes.forEach(function(a, idx) {
+            const qrData = 'KIT-' + proto + '-' + (idx + 1);
+            const kitLabel = a.kit === 'senior60' ? '60+' : 'Individual';
+            const sizeLabel = a.size ? ' &bull; Camiseta: ' + a.size : '';
+            const card = document.createElement('div');
+            card.className = 'kit-qr-card';
+            card.innerHTML =
+                '<div class="kit-qr-image">' + generateQrSvg(qrData) + '</div>' +
+                '<div class="kit-qr-label">' + qrData + '</div>' +
+                '<div class="kit-qr-name">' + escapeHtml(a.name || 'Atleta ' + (idx + 1)) + '</div>' +
+                '<div class="kit-qr-info">' + kitLabel + sizeLabel + '</div>';
+            container.appendChild(card);
+        });
+    }
+
+    section.style.display = 'block';
 }
 
 function updateSuccessScreen() {
@@ -3782,8 +5875,16 @@ function updateSuccessScreen() {
             vipSection.style.display = 'none';
         }
     } else {
-        document.getElementById('successAthleteRow').style.display = 'flex';
-        document.getElementById('successGroupRow').style.display = 'none';
+        const athletes = state.individualAthletes;
+        if (athletes.length > 1) {
+            document.getElementById('successAthleteRow').style.display = 'none';
+            document.getElementById('successGroupRow').style.display = 'flex';
+            document.getElementById('successGroupCount').textContent = athletes.length + ' atletas';
+        } else {
+            document.getElementById('successAthleteRow').style.display = 'flex';
+            document.getElementById('successGroupRow').style.display = 'none';
+            document.getElementById('successAthlete').textContent = athletes[0]?.name || '—';
+        }
         document.getElementById('groupFillNotice').style.display = 'none';
         document.getElementById('vipGroupLinkSection').style.display = 'none';
     }
@@ -3795,6 +5896,8 @@ let timerInterval;
 let timerSeconds = 899;
 
 function startTimer() {
+    if (timerStarted) return; // não reinicia se já está rodando
+    timerStarted = true;
     clearInterval(timerInterval);
     timerSeconds = 899;
     updateTimerDisplay();
@@ -3805,11 +5908,19 @@ function startTimer() {
     }, 1000);
 }
 
+function stopTimer() {
+    clearInterval(timerInterval);
+    timerStarted = false;
+}
+
 function updateTimerDisplay() {
     const min = Math.floor(timerSeconds / 60);
     const sec = timerSeconds % 60;
-    document.getElementById('timer').textContent =
-        min.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
+    const text = min.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
+    // Atualiza o timer original e todos os sincronizados
+    const el = document.getElementById('timer');
+    if (el) el.textContent = text;
+    document.querySelectorAll('.timer-sync').forEach(t => t.textContent = text);
 }
 
 // ===== TOAST =====
@@ -3900,6 +6011,104 @@ function isCpfDuplicate(cpf, excludeIndex) {
         }
     }
     return false;
+}
+
+function buildAthleteCardHTML(i) {
+    return `
+        <div class="athlete-card-header" onclick="toggleAthleteCard(${i})">
+            <div class="athlete-card-left">
+                <div class="athlete-card-num">${i + 1}</div>
+                <div class="athlete-card-name" id="athlete-name-display-${i}">
+                    Atleta ${i + 1}
+                    <small>Aguardando preenchimento</small>
+                </div>
+            </div>
+            <span class="athlete-card-status status-pending" id="athlete-status-${i}">Pendente</span>
+        </div>
+        <div class="athlete-card-body" id="athlete-body-${i}">
+            <div style="padding-top:16px;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome completo <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="gf-name-${i}" placeholder="Nome do atleta">
+                    </div>
+                    <div class="form-group">
+                        <label>CPF <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="gf-cpf-${i}" placeholder="000.000.000-00">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de nascimento <span class="required">*</span></label>
+                        <input type="date" class="form-input" id="gf-birth-${i}">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo <span class="required">*</span></label>
+                        <div class="gender-options">
+                            <button class="gender-btn" onclick="selectGender(this)" type="button">Masculino</button>
+                            <button class="gender-btn" onclick="selectGender(this)" type="button">Feminino</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>E-mail <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="gf-email-${i}" placeholder="atleta@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Celular <span class="required">*</span></label>
+                        <input type="tel" class="form-input" id="gf-phone-${i}" placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Modalidade <span class="required">*</span></label>
+                        <select class="category-select" id="gf-modality-${i}" onchange="onModalityChangePelotao('gf-category-${i}', this.value)">
+                            <option value="">Selecione</option>
+                            <option value="corrida">10km Corrida</option>
+                            <option value="caminhada">10km Caminhada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Pelotão <span class="required">*</span></label>
+                        <select class="category-select" id="gf-category-${i}">
+                            ${getPelotaoOptionsHtml('', 'corrida')}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Equipe / Assessoria</label>
+                        <input type="text" class="form-input" id="gf-team-${i}" placeholder="Nome da equipe (opcional)" value="${escapeHtml(state.groupName || '')}" disabled style="opacity:0.7;cursor:not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label>Tamanho da camiseta <span class="required">*</span></label>
+                        <select class="category-select" id="gf-shirt-${i}">
+                            <option value="">Selecione</option>
+                            <option value="PP">PP</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                            <option value="XG">XG</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Contato de emergência</label>
+                    <input type="text" class="form-input" id="gf-emergency-${i}" placeholder="Nome e telefone">
+                </div>
+                <div class="athlete-card-actions">
+                    <button class="btn-cancel" onclick="closeAthleteCard(${i})" type="button">Cancelar</button>
+                    <button class="btn-outline" onclick="fillFakeAthlete(${i})" type="button" style="border-color:var(--accent);color:var(--accent);font-size:0.82rem;padding:10px 16px;">
+                        <i class="fas fa-magic"></i> Preencher com dados fake
+                    </button>
+                    <button class="btn-save" onclick="saveAthlete(${i})" type="button">
+                        <i class="fas fa-check"></i> Salvar
+                    </button>
+                </div>
+            </div>
+        </div>`;
 }
 
 function buildGroupFillScreen() {
@@ -4051,8 +6260,25 @@ function buildGroupFillScreen() {
                 </div>
             </div>
         `;
-        container.appendChild(card);
-    }
+        section.appendChild(header);
+
+        // Cards for this type
+        for (let j = 0; j < qty; j++) {
+            const i = globalIndex;
+            groupAthletes[i] = { filled: false, data: {}, kitType: type };
+
+            const card = document.createElement('div');
+            card.className = 'athlete-card';
+            card.id = 'athlete-card-' + i;
+            card.setAttribute('data-index', i);
+            card.innerHTML = buildAthleteCardHTML(i);
+            section.appendChild(card);
+
+            globalIndex++;
+        }
+
+        container.appendChild(section);
+    });
 
     updateGroupProgress();
     updateGroupPriceSummary();
@@ -4122,7 +6348,9 @@ function editAthlete(index) {
 function fillFakeAthlete(index) {
     const name = fakeNames[index % fakeNames.length];
     const sizes = ['PP', 'P', 'M', 'G', 'GG', 'XG'];
-    const year = 1980 + Math.floor(Math.random() * 20);
+    // ~30% chance of being 60+ (born before 1966)
+    const isSeniorFake = Math.random() < 0.3;
+    const year = isSeniorFake ? (1940 + Math.floor(Math.random() * 26)) : (1980 + Math.floor(Math.random() * 20));
     const month = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0');
     const day = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0');
 
@@ -4135,7 +6363,7 @@ function fillFakeAthlete(index) {
     document.getElementById('gf-birth-' + index).value = `${year}-${month}-${day}`;
     document.getElementById('gf-email-' + index).value = fakeEmails(name);
     document.getElementById('gf-phone-' + index).value = fakePhones();
-    document.getElementById('gf-team-' + index).value = 'RunTeam Santos';
+    document.getElementById('gf-team-' + index).value = state.groupName || 'RunTeam Santos';
     document.getElementById('gf-shirt-' + index).value = sizes[Math.floor(Math.random() * sizes.length)];
     document.getElementById('gf-emergency-' + index).value = fakeNames[(index + 5) % fakeNames.length] + ' — ' + fakePhones();
     document.getElementById('gf-modality-' + index).value = fakeModalities[index % fakeModalities.length];
@@ -4148,6 +6376,17 @@ function fillFakeAthlete(index) {
     genderBtns[Math.random() > 0.5 ? 0 : 1].classList.add('selected');
 
     showToast('Dados fake preenchidos para Atleta ' + (index + 1));
+}
+
+function getAthleteAge(birthStr) {
+    if (!birthStr) return 0;
+    const birth = new Date(birthStr);
+    // Calcula idade com base em 31/12/2026
+    const refDate = new Date(2026, 11, 31); // 31 de dezembro de 2026
+    let age = refDate.getFullYear() - birth.getFullYear();
+    const m = refDate.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && refDate.getDate() < birth.getDate())) age--;
+    return age;
 }
 
 function saveAthlete(index) {
@@ -4186,6 +6425,14 @@ function saveAthlete(index) {
         showToast('Selecione o tamanho da camiseta');
         return;
     }
+    if (!category) {
+        showToast('Selecione o pelotão do atleta');
+        return;
+    }
+
+    const age = getAthleteAge(birth);
+    const isSenior = age >= 60;
+    const inscType = isSenior ? 'senior60' : 'individual';
 
     // Validar duplicidade de CPF
     if (isCpfDuplicate(cpf, index)) {
@@ -4229,7 +6476,7 @@ function saveAthlete(index) {
         name + '<small style="color:var(--text-muted);">' + kitNames[kit] + ' · ' + modalityNames[modality] + ' · ' + getCategoryLabel(category) + '</small>';
 
     document.getElementById('athlete-status-' + index).className = 'athlete-card-status status-done';
-    document.getElementById('athlete-status-' + index).textContent = 'Preenchido';
+    document.getElementById('athlete-status-' + index).textContent = isSenior ? '60+ ✓' : 'Preenchido';
 
     // Show price tag
     const priceTag = document.getElementById('athlete-price-' + index);
@@ -4359,15 +6606,246 @@ function fillFakeAthleteLink() {
     document.getElementById('al-birth').value = `${year}-${month}-${day}`;
     document.getElementById('al-email').value = fakeEmails(name);
     document.getElementById('al-phone').value = fakePhones();
-    document.getElementById('al-team').value = 'RunTeam Santos';
+    document.getElementById('al-team').value = state.groupName || 'RunTeam Santos';
     document.getElementById('al-shirt').value = sizes[Math.floor(Math.random() * sizes.length)];
     document.getElementById('al-emergency').value = fakeNames[(idx + 3) % fakeNames.length] + ' — ' + fakePhones();
+
+    // Fill modality and category
+    const modalityEl = document.getElementById('al-modality');
+    const fakeAlMod = Math.random() > 0.3 ? 'corrida' : 'caminhada';
+    if (modalityEl) modalityEl.value = fakeAlMod;
+    const categoryEl = document.getElementById('al-category');
+    if (categoryEl) {
+        applyModalityToPelotao(categoryEl, fakeAlMod);
+        if (fakeAlMod === 'corrida') {
+            const cats = ['elite-b', 'pelotao-a', 'pelotao-b', 'pelotao-c', 'pelotao-d', 'pelotao-e'];
+            categoryEl.value = cats[Math.floor(Math.random() * cats.length)];
+        }
+    }
 
     const genderBtns = document.querySelector('#screen-athletelink').querySelectorAll('.gender-btn');
     genderBtns.forEach(b => b.classList.remove('selected'));
     genderBtns[Math.random() > 0.5 ? 0 : 1].classList.add('selected');
 
     showToast('Dados fake preenchidos!');
+
+    // Also fill guest forms if they exist
+    fillFakeGuests();
+}
+
+let alLinkSlots = 1;
+
+function buildAlGuestForms(slots) {
+    alLinkSlots = slots;
+    const section = document.getElementById('alGuestsSection');
+    const container = document.getElementById('alGuestsContainer');
+    const submitBtn = document.getElementById('alSubmitBtn');
+    if (!section || !container) return;
+
+    if (slots <= 1) {
+        section.style.display = 'none';
+        if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar cadastro';
+        return;
+    }
+
+    section.style.display = 'block';
+    if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar ' + slots + ' cadastros';
+    container.innerHTML = '';
+
+    for (let i = 1; i < slots; i++) {
+        const card = document.createElement('div');
+        card.className = 'al-guest-card';
+        card.id = 'al-guest-card-' + i;
+        card.innerHTML = `
+            <div class="al-guest-header" onclick="toggleAlGuest(${i})">
+                <div class="guest-label">
+                    <span class="guest-num">${i + 1}</span>
+                    Convidado ${i}
+                </div>
+                <span class="guest-status" id="al-guest-status-${i}">
+                    <i class="fas fa-edit"></i> Pendente
+                </span>
+            </div>
+            <div class="al-guest-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome completo <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="alg-name-${i}" placeholder="Nome do convidado">
+                    </div>
+                    <div class="form-group">
+                        <label>CPF <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="alg-cpf-${i}" placeholder="000.000.000-00">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data de nascimento <span class="required">*</span></label>
+                        <input type="date" class="form-input" id="alg-birth-${i}">
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo <span class="required">*</span></label>
+                        <div class="gender-options">
+                            <button class="gender-btn" onclick="selectGender(this)" type="button">Masculino</button>
+                            <button class="gender-btn" onclick="selectGender(this)" type="button">Feminino</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>E-mail <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="alg-email-${i}" placeholder="email@exemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Celular <span class="required">*</span></label>
+                        <input type="tel" class="form-input" id="alg-phone-${i}" placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Modalidade <span class="required">*</span></label>
+                        <select class="category-select" id="alg-modality-${i}" onchange="onModalityChangePelotao('alg-category-${i}', this.value)">
+                            <option value="">Selecione</option>
+                            <option value="corrida">10km Corrida</option>
+                            <option value="caminhada">10km Caminhada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Pelotão <span class="required">*</span></label>
+                        <select class="category-select" id="alg-category-${i}">
+                            ${getPelotaoOptionsHtml('', 'corrida')}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Equipe / Assessoria</label>
+                        <input type="text" class="form-input" id="alg-team-${i}" placeholder="Nome da equipe (opcional)" value="${escapeHtml(state.groupName || '')}" disabled style="opacity:0.7;cursor:not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label>Tamanho da camiseta <span class="required">*</span></label>
+                        <select class="category-select" id="alg-shirt-${i}">
+                            <option value="">Selecione</option>
+                            <option value="PP">PP</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                            <option value="XG">XG</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Contato de emergência</label>
+                    <input type="text" class="form-input" id="alg-emergency-${i}" placeholder="Nome e telefone de contato">
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    }
+
+    // Open first guest by default
+    if (slots > 1) {
+        document.getElementById('al-guest-card-1').classList.add('open');
+    }
+}
+
+function toggleAlGuest(idx) {
+    const card = document.getElementById('al-guest-card-' + idx);
+    if (card) card.classList.toggle('open');
+}
+
+function fillFakeGuests() {
+    for (let i = 1; i < alLinkSlots; i++) {
+        const nameEl = document.getElementById('alg-name-' + i);
+        if (!nameEl) continue;
+
+        const idx = (i * 7 + Math.floor(Math.random() * 5)) % fakeNames.length;
+        const name = fakeNames[idx];
+        const sizes = ['PP', 'P', 'M', 'G', 'GG', 'XG'];
+        const year = 1985 + Math.floor(Math.random() * 15);
+        const month = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0');
+        const day = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0');
+
+        nameEl.value = name;
+        document.getElementById('alg-cpf-' + i).value = fakeCPFs[idx];
+        document.getElementById('alg-birth-' + i).value = `${year}-${month}-${day}`;
+        document.getElementById('alg-email-' + i).value = fakeEmails(name);
+        document.getElementById('alg-phone-' + i).value = fakePhones();
+        document.getElementById('alg-team-' + i).value = state.groupName || 'RunTeam Santos';
+        document.getElementById('alg-shirt-' + i).value = sizes[Math.floor(Math.random() * sizes.length)];
+        document.getElementById('alg-emergency-' + i).value = fakeNames[(idx + 2) % fakeNames.length] + ' — ' + fakePhones();
+
+        const modEl = document.getElementById('alg-modality-' + i);
+        const fakeAlgMod = Math.random() > 0.3 ? 'corrida' : 'caminhada';
+        if (modEl) modEl.value = fakeAlgMod;
+        const catEl = document.getElementById('alg-category-' + i);
+        if (catEl) {
+            applyModalityToPelotao(catEl, fakeAlgMod);
+            if (fakeAlgMod === 'corrida') {
+                const cats = ['elite-b', 'pelotao-a', 'pelotao-b', 'pelotao-c', 'pelotao-d', 'pelotao-e'];
+                catEl.value = cats[Math.floor(Math.random() * cats.length)];
+            }
+        }
+
+        const gBtns = document.getElementById('al-guest-card-' + i).querySelectorAll('.gender-btn');
+        gBtns.forEach(b => b.classList.remove('selected'));
+        gBtns[Math.random() > 0.5 ? 0 : 1].classList.add('selected');
+
+        // Update status
+        const statusEl = document.getElementById('al-guest-status-' + i);
+        if (statusEl) {
+            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Preenchido';
+            statusEl.classList.add('filled');
+        }
+    }
+}
+
+function updateAlDeadlineWarning() {
+    const container = document.getElementById('alDeadlineWarning');
+    if (!container) return;
+
+    // Deadline: 3 dias a partir da inscrição do grupo (simulado como 14/03/2026)
+    const deadline = new Date('2026-03-14T23:59:59');
+    const now = new Date();
+    const diffMs = deadline - now;
+    const diffHours = diffMs / (1000 * 60 * 60);
+    const diffDays = diffHours / 24;
+
+    let level, icon, title, sub;
+
+    if (diffMs <= 0) {
+        level = 'level-expired';
+        icon = 'fa-times-circle';
+        title = 'Prazo encerrado!';
+        sub = 'O prazo para preenchimento da inscrição expirou.';
+    } else if (diffHours <= 24) {
+        const hours = Math.floor(diffHours);
+        const mins = Math.floor((diffHours - hours) * 60);
+        level = 'level-urgent';
+        icon = 'fa-exclamation-circle';
+        title = `URGENTE! Restam ${hours}h${mins > 0 ? mins + 'min' : ''} para preencher!`;
+        sub = `Prazo final: 14/03/2026 às 23:59 — Preencha seus dados agora!`;
+    } else if (diffDays <= 2) {
+        const days = Math.floor(diffDays);
+        const hours = Math.floor((diffDays - days) * 24);
+        level = 'level-warn';
+        icon = 'fa-exclamation-triangle';
+        title = `Atenção! Resta${days > 1 ? 'm' : ''} ${days} dia${days > 1 ? 's' : ''} e ${hours}h`;
+        sub = `Prazo final: 14/03/2026 às 23:59 — Não deixe para a última hora!`;
+    } else {
+        const days = Math.ceil(diffDays);
+        level = 'level-ok';
+        icon = 'fa-clock';
+        title = `Preencha até: 14/03/2026`;
+        sub = `Você tem ${days} dias para completar sua inscrição.`;
+    }
+
+    container.innerHTML = `
+        <div class="al-deadline ${level}">
+            <div class="al-deadline-title"><i class="fas ${icon}" style="margin-right:6px;"></i>${title}</div>
+            <div class="al-deadline-sub">${sub}</div>
+        </div>
+    `;
 }
 
 function submitAthleteLink() {
@@ -4376,9 +6854,35 @@ function submitAthleteLink() {
     const birth = document.getElementById('al-birth').value;
     const shirt = document.getElementById('al-shirt').value;
 
+    const mainCategory = document.getElementById('al-category')?.value;
+
     if (!name || !cpf) {
-        showToast('Preencha pelo menos nome e CPF');
+        showToast('Preencha pelo menos nome e CPF do atleta principal');
         return;
+    }
+    if (!mainCategory) {
+        showToast('Selecione o pelotão antes de confirmar');
+        document.getElementById('al-category')?.focus();
+        return;
+    }
+
+    // Validate guests
+    for (let i = 1; i < alLinkSlots; i++) {
+        const gName = document.getElementById('alg-name-' + i)?.value.trim();
+        const gCpf = document.getElementById('alg-cpf-' + i)?.value.trim();
+        const gCat = document.getElementById('alg-category-' + i)?.value;
+        if (!gName || !gCpf) {
+            showToast('Preencha nome e CPF do Convidado ' + i);
+            const card = document.getElementById('al-guest-card-' + i);
+            if (card && !card.classList.contains('open')) card.classList.add('open');
+            return;
+        }
+        if (!gCat) {
+            showToast('Selecione o pelotão do Convidado ' + i);
+            const card = document.getElementById('al-guest-card-' + i);
+            if (card && !card.classList.contains('open')) card.classList.add('open');
+            return;
+        }
     }
 
     // Validar data de nascimento
@@ -4391,11 +6895,16 @@ function submitAthleteLink() {
     }
 
     const loading = document.getElementById('loading');
-    document.getElementById('loadingText').textContent = 'Registrando seus dados...';
+    const totalInscritos = alLinkSlots;
+    document.getElementById('loadingText').textContent = totalInscritos > 1
+        ? 'Registrando ' + totalInscritos + ' inscrições...'
+        : 'Registrando seus dados...';
     loading.classList.add('visible');
 
     setTimeout(() => {
-        document.getElementById('loadingText').textContent = 'Confirmando inscrição...';
+        document.getElementById('loadingText').textContent = totalInscritos > 1
+            ? 'Confirmando inscrições...'
+            : 'Confirmando inscrição...';
     }, 800);
 
     setTimeout(() => {
@@ -4403,8 +6912,8 @@ function submitAthleteLink() {
 
         document.getElementById('alSuccessName').textContent = name;
         document.getElementById('alSuccessCpf').textContent = cpf;
-        document.getElementById('alSuccessModality').textContent = modalityNames[state.modality] || '10km Corrida';
-        document.getElementById('alSuccessKit').textContent = kitNames[state.kit] || 'Premium';
+        document.getElementById('alSuccessModality').textContent = chosenModality;
+        document.getElementById('alSuccessPelotao').textContent = pelotaoNames[mainCategory] || '—';
         document.getElementById('alSuccessShirt').textContent = shirt || '—';
 
         goToScreen('athletelinksuccess');
@@ -4426,13 +6935,300 @@ function handleHash() {
         document.getElementById('alKit').textContent = kitNames[state.kit] || 'Premium';
         const proto = document.getElementById('protocolNumber');
         document.getElementById('alProtocol').textContent = proto ? proto.textContent.slice(-9) : 'RK-...48291';
+        // Pre-fill team with group name
+        const alTeamEl = document.getElementById('al-team');
+        if (alTeamEl) alTeamEl.value = state.groupName || '';
+        buildAlGuestForms(linkSlots);
+        updateAlDeadlineWarning();
         goToScreen('athletelink');
     } else if (hash === '#sucesso') {
         goToScreen('success');
+    } else if (hash === '#login') {
+        goToScreen('login');
+    } else if (hash === '#minhas-inscricoes') {
+        if (loggedInPhone) {
+            goToScreen('myinscriptions');
+        } else {
+            goToScreen('login');
+        }
     }
 }
 
 window.addEventListener('hashchange', handleHash);
+
+// ===== LOGIN & MY INSCRIPTIONS =====
+let loggedInPhone = null;
+let registeredInscriptions = []; // persisted list
+
+function loadInscriptions() {
+    try {
+        const raw = localStorage.getItem('gorunking_inscriptions');
+        if (raw) registeredInscriptions = JSON.parse(raw);
+    } catch (e) { registeredInscriptions = []; }
+}
+
+function saveInscriptions() {
+    localStorage.setItem('gorunking_inscriptions', JSON.stringify(registeredInscriptions));
+}
+
+function storeCurrentInscription() {
+    const isGroup = state.type === 'group';
+    const phone = isGroup
+        ? (state.groupPhone || '')
+        : (state.individualAthletes[0]?.phone?.replace(/\D/g, '') || '');
+
+    if (!phone) return;
+
+    const proto = document.getElementById('protocolNumber')?.textContent || 'RK-2026-0000-00000';
+
+    if (isGroup) {
+        registeredInscriptions.push({
+            id: Date.now(),
+            type: 'group',
+            phone: phone,
+            protocol: proto,
+            groupName: state.groupName,
+            groupSize: state.groupSize,
+            responsavel: state.groupResponsavel,
+            status: groupFinalized ? 'confirmed' : 'pending',
+            payment: state.payment || 'pending',
+            date: new Date().toISOString(),
+            athletes: Object.values(groupAthletes).map(a => ({
+                name: a.data?.name || '(pendente)',
+                kit: a.inscType || 'individual',
+                filled: a.filled
+            }))
+        });
+    } else {
+        const athletes = state.individualAthletes.map(a => ({
+            name: a.name,
+            cpf: a.cpf,
+            modality: modalityNames[a.modality] || '',
+            pelotao: pelotaoNames[a.pelotao] || '',
+            kit: a.kit,
+            size: a.size,
+            team: a.team
+        }));
+        const subtotal = state.individualAthletes.reduce((s, a) => s + (kitPrices[a.kit] || kitPrices.individual), 0);
+        registeredInscriptions.push({
+            id: Date.now(),
+            type: 'individual',
+            phone: phone,
+            protocol: proto,
+            status: 'confirmed',
+            payment: state.payment === 'pix' ? 'PIX' : 'Cartão',
+            total: (subtotal * 1.08).toFixed(2),
+            date: new Date().toISOString(),
+            athletes: athletes
+        });
+    }
+    saveInscriptions();
+}
+
+function maskLoginPhone(el) {
+    let v = el.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    else if (v.length > 0) v = '(' + v;
+    el.value = v;
+}
+
+function sendLoginCode() {
+    const phone = document.getElementById('loginPhone').value.replace(/\D/g, '');
+    if (phone.length < 10) {
+        showToast('Preencha o celular completo');
+        return;
+    }
+    document.getElementById('loginPhoneStep').style.display = 'none';
+    document.getElementById('loginCodeStep').style.display = 'block';
+    document.getElementById('loginPhoneDisplay').textContent = document.getElementById('loginPhone').value;
+    document.getElementById('loginCode').value = '';
+    document.getElementById('loginCode').focus();
+    showToast('Código SMS enviado!');
+}
+
+function resetLoginPhone() {
+    document.getElementById('loginPhoneStep').style.display = 'block';
+    document.getElementById('loginCodeStep').style.display = 'none';
+    document.getElementById('loginPhone').focus();
+}
+
+function verifyLoginCode() {
+    const code = document.getElementById('loginCode').value;
+    if (code.length < 6) {
+        showToast('Digite o código de 6 dígitos');
+        return;
+    }
+
+    const btn = document.getElementById('loginVerifyBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+
+    setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+        const phone = document.getElementById('loginPhone').value.replace(/\D/g, '');
+        loggedInPhone = phone;
+
+        // Check if this phone has group inscriptions
+        loadInscriptions();
+        const groupInsc = registeredInscriptions.find(i => i.type === 'group' && i.phone === phone);
+        if (groupInsc && groupInsc.status === 'pending') {
+            // Redirect to group management
+            showToast('Bem-vindo, ' + (groupInsc.responsavel || 'Responsável') + '!');
+            goToScreen('myinscriptions');
+        } else {
+            goToScreen('myinscriptions');
+        }
+        updateHeaderLogin();
+    }, 1200);
+}
+
+function logoutUser() {
+    loggedInPhone = null;
+    updateHeaderLogin();
+    // Reset login form
+    document.getElementById('loginPhoneStep').style.display = 'block';
+    document.getElementById('loginCodeStep').style.display = 'none';
+    document.getElementById('loginPhone').value = '';
+    document.getElementById('loginCode').value = '';
+    goToScreen('landing');
+}
+
+function updateHeaderLogin() {
+    const btn = document.getElementById('headerLoginBtn');
+    if (loggedInPhone) {
+        const formatted = loggedInPhone.length === 11
+            ? '(' + loggedInPhone.slice(0,2) + ') •••••-' + loggedInPhone.slice(7)
+            : loggedInPhone;
+        btn.innerHTML = '<i class="fas fa-user-check" style="color:var(--primary);"></i> <span class="login-label">' + formatted + '</span>';
+        btn.setAttribute('onclick', "goToScreen('myinscriptions')");
+    } else {
+        btn.innerHTML = '<i class="fas fa-user-circle"></i> <span class="login-label">Entrar</span>';
+        btn.setAttribute('onclick', "goToScreen('login')");
+    }
+}
+
+function renderMyInscriptions() {
+    loadInscriptions();
+    const phone = loggedInPhone;
+    if (!phone) { goToScreen('login'); return; }
+
+    document.getElementById('myInscPhone').textContent =
+        phone.length === 11 ? '(' + phone.slice(0,2) + ') ' + phone.slice(2,7) + '-' + phone.slice(7) : phone;
+
+    const myInscs = registeredInscriptions.filter(i => i.phone === phone);
+    const listEl = document.getElementById('myInscList');
+    const emptyEl = document.getElementById('myInscEmpty');
+
+    if (myInscs.length === 0) {
+        listEl.innerHTML = '';
+        emptyEl.style.display = 'block';
+        return;
+    }
+
+    emptyEl.style.display = 'none';
+    listEl.innerHTML = myInscs.map(insc => {
+        const d = new Date(insc.date);
+        const dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const statusClass = insc.status === 'confirmed' ? 'confirmed' : 'pending';
+        const statusText = insc.status === 'confirmed' ? 'Confirmada' : 'Pendente';
+
+        if (insc.type === 'group') {
+            const filledCount = (insc.athletes || []).filter(a => a.filled).length;
+            return `
+            <div class="insc-card">
+                <div class="insc-card-header">
+                    <h4><i class="fas fa-users" style="color:var(--primary);margin-right:8px;"></i>${escapeHtml(insc.groupName || 'Grupo')}</h4>
+                    <span class="insc-status ${statusClass}">${statusText}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Protocolo</span>
+                    <span style="font-weight:600;color:var(--primary);font-family:'Space Grotesk';">${insc.protocol}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Tipo</span>
+                    <span>Inscrição em Grupo</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Responsável</span>
+                    <span>${escapeHtml(insc.responsavel || '—')}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Atletas</span>
+                    <span>${filledCount} / ${insc.groupSize} preenchidos</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Pagamento</span>
+                    <span>${insc.status === 'confirmed' ? (insc.payment || 'Confirmado') : 'Após preenchimento'}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Data</span>
+                    <span>${dateStr}</span>
+                </div>
+                ${insc.status === 'pending' ? `
+                <div style="margin-top:14px;text-align:center;">
+                    <button class="btn-primary" onclick="openGroupFromInsc(${insc.id})" style="padding:10px 24px;font-size:0.85rem;">
+                        <i class="fas fa-users-cog"></i> Gerenciar grupo
+                    </button>
+                </div>` : ''}
+            </div>`;
+        } else {
+            // Individual
+            const athletes = insc.athletes || [];
+            return `
+            <div class="insc-card">
+                <div class="insc-card-header">
+                    <h4><i class="fas fa-running" style="color:var(--primary);margin-right:8px;"></i>Inscrição Individual</h4>
+                    <span class="insc-status ${statusClass}">${statusText}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Protocolo</span>
+                    <span style="font-weight:600;color:var(--primary);font-family:'Space Grotesk';">${insc.protocol}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Pagamento</span>
+                    <span>${insc.payment || '—'}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Total</span>
+                    <span style="font-weight:600;color:var(--primary);">R$ ${parseFloat(insc.total || 0).toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="insc-detail-row">
+                    <span class="label">Data</span>
+                    <span>${dateStr}</span>
+                </div>
+                <div class="insc-athletes-list">
+                    <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;font-weight:600;">${athletes.length} atleta(s)</div>
+                    ${athletes.map((a, i) => `
+                    <div class="insc-athlete-row">
+                        <div class="insc-athlete-num">${i + 1}</div>
+                        <div style="flex:1;">
+                            <div style="font-weight:600;">${escapeHtml(a.name)}</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);">${a.modality || ''} · ${a.pelotao || ''} · ${a.size || ''}</div>
+                        </div>
+                        <span class="ind-athlete-kit-badge ${a.kit === 'senior60' ? 'senior60' : 'individual'}" style="font-size:0.7rem;">
+                            ${a.kit === 'senior60' ? '60+' : 'Individual'}
+                        </span>
+                    </div>`).join('')}
+                </div>
+            </div>`;
+        }
+    }).join('');
+}
+
+function openGroupFromInsc(inscId) {
+    // Reload group state and navigate to groupfill
+    const insc = registeredInscriptions.find(i => i.id === inscId);
+    if (!insc) return;
+    state.type = 'group';
+    state.groupName = insc.groupName;
+    state.groupSize = insc.groupSize;
+    state.groupResponsavel = insc.responsavel;
+    showToast('Abrindo gestão do grupo...');
+    goToScreen('groupfill');
+}
 
 // Override goToScreen to also build group fill when navigating there
 const _originalGoToScreen = goToScreen;
@@ -4440,12 +7236,20 @@ goToScreen = function(screen) {
     if (screen === 'groupfill' && Object.keys(groupAthletes).length === 0) {
         buildGroupFillScreen();
     }
+    if (screen === 'athletelink') {
+        updateAlDeadlineWarning();
+    }
+    if (screen === 'myinscriptions') {
+        renderMyInscriptions();
+    }
     _originalGoToScreen(screen);
     const hashMap = {
         groupfill: '#grupo',
-        athletelink: '#atleta',
+        athletelink: '#atleta' + (alLinkSlots > 1 ? '/' + alLinkSlots : ''),
         athletelinksuccess: '#atleta/sucesso',
         success: '#sucesso',
+        login: '#login',
+        myinscriptions: '#minhas-inscricoes',
     };
     if (hashMap[screen]) {
         history.replaceState(null, '', hashMap[screen]);
@@ -4716,6 +7520,7 @@ function switchGfTabDirect(tab) {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
+    loadInscriptions();
     if (window.location.hash) {
         handleHash();
     }
